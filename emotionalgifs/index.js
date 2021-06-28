@@ -10,7 +10,7 @@ module.exports = async function (context, req) {
 
     // console.log(parts[0].data)
     // var result = await analyzeImage(parts[0].data);
-    var result = await analyzeImage(body);
+    var result = await analyzeImage(parts[0]data);
     console.log(result)
     context.res = {
         body: {
