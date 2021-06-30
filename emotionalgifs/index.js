@@ -8,9 +8,7 @@ module.exports = async function (context, req) {
     var body = req.body;
     var parts = multipart.Parse(body, boundary);
 
-    // console.log(parts[0].data)
-    // var result = await analyzeImage(parts[0].data);
-    var result = await analyzeImage(parts[0].data);
+    var result = await analyzeImage(body);
     console.log(result)
     context.res = {
         body: {
