@@ -7,11 +7,10 @@ module.exports = async function (context, req) {
     var boundary = multipart.getBoundary(req.headers['content-type']);
     var body = req.body;
     var parts = multipart.Parse(body, boundary);
-
     var result = await analyzeImage(parts[0].data);
     var emotions = result[0].faceAttributes.emotion;
-    let objects = Object.values({emotion: value});
-    const main_emotion = Object.keys(emotions).find(key => emotions[key] === Math.max(...objects));
+    var objects = Object.values(emotions);
+    var main_emotion = Object.keys(emotions).find(key => emotions[key] === Math.max(...objects));
 
     context.res = {
         body: {
@@ -19,7 +18,6 @@ module.exports = async function (context, req) {
         }
     };
 }
-
 
 async function analyzeImage(img) {
     const subKey = process.env.SUBSCRIPTIONKEY;
@@ -33,7 +31,7 @@ async function analyzeImage(img) {
     let urlToUse = uriBase + '?' + params.toString();
     console.log(urlToUse)
     let resp = await fetch(urlToUse, {
-        method: 'POST',  //WHAT TYPE OF REQUEST?
+        method: 'POST', 
         body: img,
 
 
