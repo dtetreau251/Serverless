@@ -48,7 +48,7 @@ async function analyzeImage(img) {
 
 async function findGifs(emotion) {
     var giphykey = process.env.GIPHY_API
-    var apiResult = await fetch (`https://api.giphy.com/v1/gifs/translate?api_key=${giphykey}&s=${emotion}`);
+    var gifresponse = await fetch (`https://api.giphy.com/v1/gifs/translate?api_key=${giphykey}&s=${emotion}`);
     var gifresp = await gifresponse.json()
     return gifresp.data.url
 }
