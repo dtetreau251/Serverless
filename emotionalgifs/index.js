@@ -31,7 +31,7 @@ async function analyzeImage(img) {
     var urlToUse = uriBase + '?' + params.toString();
     console.log(urlToUse)
     var resp = await fetch(urlToUse, {
-        method: 'POST', 
+        method: 'GET', 
         body: img,
 
 
