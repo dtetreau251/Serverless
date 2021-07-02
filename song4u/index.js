@@ -1,8 +1,8 @@
 const querystring = require('querystring');
 const fetch = require('node-fetch');
 
-module.exports = async function (context, req) {	module.exports = async function (context, req) {
-    context.log('JavaScript HTTP trigger function processed a request.');	    context.log('JavaScript HTTP trigger function processed a request.');
+module.exports = async function (context, req) {
+    context.log('JavaScript HTTP trigger function processed a request.');	
     context.log(req.body)	
     const queryObject = querystring.parse(req.body);
     const url = queryObject.MediaUrl0;
@@ -71,5 +71,4 @@ function determineAge(age) {
         else {
             return "Unknown"
         }
-    }
 }
