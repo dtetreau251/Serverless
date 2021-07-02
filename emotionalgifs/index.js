@@ -10,6 +10,7 @@ module.exports = async function (context, req) {
 
     var result = await analyzeImage(parts[0].data);
     var emotions = result[0].faceAttributes.emotion;
+    let objects = Object.values({emotion: value});
     const main_emotion = Object.keys(emotions).find(key => emotions[key] === Math.max(...objects));
 
     context.res = {
@@ -35,7 +36,7 @@ async function analyzeImage(img) {
         method: 'POST',  //WHAT TYPE OF REQUEST?
         body: img,
 
-      	//ADD YOUR TWO HEADERS HERE
+
         headers: {
             'Content-Type': 'application/octet-stream',
             'Ocp-Apim-Subscription-Key': subKey
