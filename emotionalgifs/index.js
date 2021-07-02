@@ -4,51 +4,52 @@ const fetch = require('node-fetch');
 module.exports = async function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
 
-    var boundary = multipart.getBoundary(req.headers['content-type']);
-    var body = req.body;
-    var parts = multipart.Parse(body, boundary);
-    var imageData = parts[0].data;
-    var result = await analyzeImage(imageData);
-    var emotions = result[0].faceAttributes.emotion;
-    var objects = Object.values(emotions);
-    var main_emotion = Object.keys(emotions).find(key => emotions[key] === Math.max(...objects));
-    var gifUrl = await findGifs(main_emotion);
+    let boundary = multipart.getBoundary(req.headers['content-type']);
+    let body = req.body;
+    let parts = multipart.Parse(body, boundary);
+    let imageData = parts[0].data;
+    let result = await analyzeImage(imageData);
+    let emotions = result[0].faceAttributes.emotion;
+    let objects = Object.values(emotions);
+    let main_emotion = Object.keys(emotions).find(key => emotions[key] === Math.max(...objects));
+    let gifUrl = await findGifs(main_emotion);
 
     context.res = {
         body: gifUrl
     };
+    context.done();
 }
 
 async function analyzeImage(img) {
-    var subKey = process.env.SUBSCRIPTIONKEY;
-    var uriBase = process.env.ENDPOINT + '/face/v1.0/detect';
+    let subscriptionKey = process.env.SUBSCRIPTIONKEY;
+    let uriBase = process.env.ENDPOINT + '/face/v1.0/detect';
 
-    var params = new URLSearchParams({
+    let params = new URLSearchParams({
         'returnFaceId': 'true',
         'returnFaceAttributes': 'emotion'
     })
 
-    var urlToUse = uriBase + '?' + params.toString();
+    let urlToUse = uriBase + '?' + params.toString();
     console.log(urlToUse)
-    var resp = await fetch(urlToUse, {
-        method: 'GET', 
+    let resp = await fetch(urlToUse, {
+        method: 'POST', 
         body: img,
 
 
         headers: {
             'Content-Type': 'application/octet-stream',
-            'Ocp-Apim-Subscription-Key': subKey
+            'Ocp-Apim-Subscription-Key': subscriptionKey
         }
     })
 
-    var data = await resp.json();
-    return data;
+    let emotionData = await resp.json();
+    return emotionData;
 
 }
 
 async function findGifs(emotion) {
-    var giphykey = process.env.GIPHY_API
-    var gifresponse = await fetch (`https://api.giphy.com/v1/gifs/translate?api_key=${giphykey}&s=${emotion}`);
-    var gifresp = await gifresponse.json()
+    let giphykey = process.env.GIPHY_API
+    let gifresponse = await fetch (`https://api.giphy.com/v1/gifs/translate?api_key=${giphykey}&s=${emotion}`);
+    let gifresp = await gifresponse.json()
     return gifresp.data.url
 }
