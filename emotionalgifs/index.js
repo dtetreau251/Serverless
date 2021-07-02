@@ -7,15 +7,14 @@ module.exports = async function (context, req) {
     var boundary = multipart.getBoundary(req.headers['content-type']);
     var body = req.body;
     var parts = multipart.Parse(body, boundary);
-    var result = await analyzeImage(parts[0].data);
+    var imageData = parts[0].data;
+    var result = await analyzeImage(imageData);
     var emotions = result[0].faceAttributes.emotion;
     var objects = Object.values(emotions);
     var main_emotion = Object.keys(emotions).find(key => emotions[key] === Math.max(...objects));
 
     context.res = {
-        body: {
-           main_emotion
-        }
+        body: main_emotion
     };
 }
 
