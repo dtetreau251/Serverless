@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "node-fetch": "^2.6.1",
+    "query-string": "^7.0.1",
     "querystring": "^0.2.1"
   },
   "devDependencies": {},
