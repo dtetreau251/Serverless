@@ -12,24 +12,25 @@ module.exports = async function (context, req) {
     var emotions = result[0].faceAttributes.emotion;
     var objects = Object.values(emotions);
     var main_emotion = Object.keys(emotions).find(key => emotions[key] === Math.max(...objects));
+    var gifUrl = await findGifs(main_emotion);
 
     context.res = {
-        body: main_emotion
+        body: gifUrl;
     };
 }
 
 async function analyzeImage(img) {
-    const subKey = process.env.SUBSCRIPTIONKEY;
-    const uriBase = process.env.ENDPOINT + '/face/v1.0/detect';
+    var subKey = process.env.SUBSCRIPTIONKEY;
+    var uriBase = process.env.ENDPOINT + '/face/v1.0/detect';
 
-    let params = new URLSearchParams({
+    var params = new URLSearchParams({
         'returnFaceId': 'true',
         'returnFaceAttributes': 'emotion'
     })
 
-    let urlToUse = uriBase + '?' + params.toString();
+    var urlToUse = uriBase + '?' + params.toString();
     console.log(urlToUse)
-    let resp = await fetch(urlToUse, {
+    var resp = await fetch(urlToUse, {
         method: 'POST', 
         body: img,
 
@@ -40,7 +41,14 @@ async function analyzeImage(img) {
         }
     })
 
-    let data = await resp.json();
+    var data = await resp.json();
     return data;
 
+}
+
+async function findGifs(emotion) {
+    var giphykey = process.env.GIPHY_API
+    var apiResult = await fetch (`https://api.giphy.com/v1/gifs/translate?api_key=${giphykey}&s=${emotion}`);
+    var gifresp = await gifresponse.json()
+    return gifresp.data.url
 }
