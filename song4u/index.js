@@ -1,4 +1,4 @@
-const querystring = require('querystring');
+const querystring = require('query-string');
 const fetch = require('node-fetch');
 
 module.exports = async function (context, req) {
@@ -15,7 +15,7 @@ module.exports = async function (context, req) {
     context.log("GENERATION: " + generation)
 
     context.res = {
-        body: `${generation}`
+        body: generation
     };
 }
 
