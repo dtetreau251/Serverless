@@ -32,8 +32,8 @@ async function downloadImage(imgUrl) {
 
 async function getFaceData(binaryData) {
 
-    const subKey = process.env['SUBSCRIPTIONKEY'];
-    const uriBase = process.env['ENDPOINT'] + 'face/v1.0/detect'
+    const subKey = process.env['SUBSCRIPTION_KEY'];
+    const uriBase = process.env['API_ENDPOINT'] + 'face/v1.0/detect'
 
     let params = new URLSearchParams({
         'returnFaceId': 'true',
