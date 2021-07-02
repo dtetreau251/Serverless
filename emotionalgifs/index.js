@@ -15,7 +15,7 @@ module.exports = async function (context, req) {
     var gifUrl = await findGifs(main_emotion);
 
     context.res = {
-        body: gifUrl;
+        body: gifUrl
     };
 }
 
