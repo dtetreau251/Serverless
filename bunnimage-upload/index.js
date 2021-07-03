@@ -1,5 +1,5 @@
 var multipart = require("parse-multipart")
-const connectionString = process.env.STORAGE_ACCOUNT_CONNECTION_STRING;
+const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
 const { BlobServiceClient } = require("@azure/storage-blob");
 
 module.exports = async function (context, req) {
@@ -8,6 +8,14 @@ module.exports = async function (context, req) {
 
     var boundary = multipart.getBoundary(req.headers['content-type']);
     var body = req.body;
+    var responseMessage = ""
+    if (body == null) {
+        responseMessage = "Sorry! No image attached."
+    } else {
+        var password =  req.headers['codename'];
+        responseMessage = await uploadFile(parsedBody, ext, password);
+    }
+
     var parsedBody = multipart.Parse(body, boundary);
     var filetype = parsedBody[0].type;
     if (filetype == "image/png") {
@@ -21,10 +29,8 @@ module.exports = async function (context, req) {
         ext = "";
     }
 
-    var responseMessage = await uploadFile(parsedBody, ext);
-
     context.res = {
-        body: "File Saved"
+        body: responseMessage
     };    
 
 }
