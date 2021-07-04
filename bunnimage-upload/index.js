@@ -32,15 +32,28 @@ module.exports = async function (context, req) {
     context.res = {
         body: responseMessage
     };    
-
 }
 
-async function uploadFile(parsedBody, ext) {
+async function uploadFile(parsedBody, ext, password) {
     const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
     const containerName = process.env.CONTAINER_NAME;
     const containerClient = blobServiceClient.getContainerClient(containerName);    // Get a reference to a container
-    const blobName = 'test.' + ext;    // Create the container
+    const blobName = `${filename}.${ext}`;    // Create the container
     const blockBlobClient = containerClient.getBlockBlobClient(blobName); // Get a block blob client
     const uploadBlobResponse = await blockBlobClient.upload(parsedBody[0].data, parsedBody[0].data.length);
     return uploadBlobResponse;
+}
+
+function determineExt(filetype) {
+    if (filetype == "image/png") {
+        ext = "png";
+    } else if (filetype == "image/jpeg") {
+        ext = "jpeg";
+    } else if (filetype == "image/jpg") {
+        ext = "jpg"
+    } else {
+        username = "invalidimage"
+        ext = "";
+    }
+    return ext
 }
