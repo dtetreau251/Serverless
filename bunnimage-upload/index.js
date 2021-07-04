@@ -9,6 +9,8 @@ module.exports = async function (context, req) {
     var boundary = multipart.getBoundary(req.headers['content-type']);
     var body = req.body;
     var responseMessage = ""
+    var headers = req.headers;
+    
     if (body == null) {
         responseMessage = "Sorry! No image attached."
     } 
@@ -19,18 +21,6 @@ module.exports = async function (context, req) {
         var password = headers.codename;
         // upload the file to blob
         responseMessage = await uploadFile(parsedBody, ext, password);
-    }
-
-    var filetype = parsedBody[0].type;
-    if (filetype == "image/png") {
-        ext = "png";
-    } else if (filetype == "image/jpeg") {
-        ext = "jpeg";
-    } else if (filetype == "image/jpg") {
-        ext = "jpg"
-    } else {
-        username = "invalidimage"
-        ext = "";
     }
 
     context.res = {
