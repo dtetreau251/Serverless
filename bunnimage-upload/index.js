@@ -8,20 +8,19 @@ module.exports = async function (context, req) {
 
     var boundary = multipart.getBoundary(req.headers['content-type']);
     var body = req.body;
-    var headers = req.headers;
     var responseMessage = ""
     if (body == null) {
         responseMessage = "Sorry! No image attached."
-    } else {
-        var password =  req.headers['codename'];
+    } 
+    else {
         var parsedBody = multipart.Parse(body, boundary);
         // get the file extension
         var ext = determineExt(parsedBody[0].type);
+        var password = headers.codename;
         // upload the file to blob
         responseMessage = await uploadFile(parsedBody, ext, password);
     }
 
-    var parsedBody = multipart.Parse(body, boundary);
     var filetype = parsedBody[0].type;
     if (filetype == "image/png") {
         ext = "png";
