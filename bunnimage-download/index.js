@@ -3,12 +3,11 @@ var fetch = require("node-fetch");
 module.exports = async function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
 
-    let blobname = "images";
-
+    let blobname = "bunnimage";
     var username = req.headers['username'];
     var download = ""
     var downloadpng = "https://" + blobname + ".blob.core.windows.net/images/" + username + ".png";
-    var downloadjpg = "https://" + blobname + ".blob.core.windows.net/images/" + username + ".jpeg";
+    var downloadjpg = "https://" + blobname + ".blob.core.windows.net/images/" + username + ".jpg";
 
     let pngresp = await fetch(downloadpng, {
         method: 'GET',
@@ -34,7 +33,6 @@ module.exports = async function (context, req) {
         context.log("Does exist: " + jpgdata)
         }
      
-
         context.res = {
         body: {
                     "downloadUri" : download,
