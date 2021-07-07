@@ -3,7 +3,7 @@ var fetch = require("node-fetch");
 module.exports = async function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
 
-    let blobname = "bunnimage";
+    let blobname = "images";
     var username = req.headers['username'];
     var download = ""
     var downloadpng = "https://" + blobname + ".blob.core.windows.net/images/" + username + ".png";
@@ -35,7 +35,7 @@ module.exports = async function (context, req) {
      
         context.res = {
         body: {
-                    "downloadUri" : download,
+                    "downloadUrl" : download,
                     "success": success,
         }
     };
