@@ -14,7 +14,7 @@ module.exports = async function (context, req) {
         })
         let pngdata = await pngresp;
         
-        let jpgresp = await fetch(downloadjpeg, {
+        let jpegresp = await fetch(downloadjpeg, {
         method: 'GET',
         })
         let jpegdata = await jpegresp;
