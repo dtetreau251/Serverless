@@ -3,7 +3,7 @@ var fetch = require("node-fetch");
 module.exports = async function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
 
-    let blobname = "bunnimage";
+    let blobname = "image";
 
     var username = req.headers['username'];
     var download = ""
