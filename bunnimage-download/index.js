@@ -9,6 +9,7 @@ module.exports = async function (context, req) {
 
     let downloadpng = "https://bunnimage.blob.core.windows.net/images/" + username + ".png";
     let downloadjpg = "https://bunnimage.blob.core.windows.net/images/" + username + ".jpg";
+    let downloadjpeg = "https://bunnimage.blob.core.windows.net/images/" + username + ".jpeg";
 
     let pngresp = await fetch(downloadpng, {
         method: 'GET',
@@ -20,11 +21,17 @@ module.exports = async function (context, req) {
      })
      let jpgdata = await jpgresp;
 
+     let jpegresp = await fetch(downloadjpeg, {
+        method: 'GET',
+     })
+     let jpegdata = await jpgresp;
+
      // check which one is valid
-     if (pngdata.statusText == "The specified blob does not exist." && jpgdata.statusText == "The specified blob does not exist." ) {
+     if (pngdata.statusText == "The specified blob does not exist." && jpgdata.statusText == "The specified blob does not exist." && jpegdata.statusText == "The specified blob does not exist." ) {
         success = false;
         context.log("Does not exist: " + pngdata)
         context.log("Does not exist: " + jpgdata)
+        context.log("Does not exist: " + jpegdata)
      } else if (pngdata.statusText != "The specified blob does not exist.") {
         success = true;
         download = downloadpng
@@ -33,7 +40,12 @@ module.exports = async function (context, req) {
         success = true;
         download = downloadjpg
         context.log("Does exist: " + jpgdata)
+     } else if (jpegdata.statusText != "The specified blob does not exist.") {
+        success = true;
+        download = downloadjpeg
+        context.log("Does exist: " + jpegdata)
      }
+
 
     context.res = {
         // status: 200, /* Defaults to 200 */
