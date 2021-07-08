@@ -24,7 +24,7 @@ module.exports = async function (context, req) {
      let jpegresp = await fetch(downloadjpeg, {
         method: 'GET',
      })
-     let jpegdata = await jpgresp;
+     let jpegdata = await jpegresp;
 
      // check which one is valid
      if (pngdata.statusText == "The specified blob does not exist." && jpgdata.statusText == "The specified blob does not exist." && jpegdata.statusText == "The specified blob does not exist." ) {
