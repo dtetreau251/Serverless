@@ -46,7 +46,7 @@ module.exports = async function (context, req) {
     
         context.res = {
         body: {
-                    "downloadUrl" : download,
+                    "downloadUri" : download,
                     "success": success,
         }
     };
