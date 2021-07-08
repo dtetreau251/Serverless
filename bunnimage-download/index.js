@@ -51,7 +51,7 @@ module.exports = async function (context, req) {
         // status: 200, /* Defaults to 200 */
             body: {
                 "downloadUrl": download,
-                "success": success
+                "success": "success"
             }
     };
     context.log(download);
