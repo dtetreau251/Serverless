@@ -7,30 +7,30 @@ module.exports = async function (context, req) {
     var username = req.headers['username'];
     var download = ""
     var downloadpng = "https://" + blobname + ".blob.core.windows.net/images/" + username + ".png";
-    var downloadjpeg = "https://" + blobname + ".blob.core.windows.net/images/" + username + ".jpeg";
+    var downloadjpg = "https://" + blobname + ".blob.core.windows.net/images/" + username + ".jpg";
 
     let pngresp = await fetch(downloadpng, {
         method: 'GET',
         })
         let pngdata = await pngresp;
         
-        let jpegresp = await fetch(downloadjpeg, {
+        let jpgresp = await fetch(downloadjpg, {
         method: 'GET',
         })
-        let jpegdata = await jpegresp;
+        let jpgdata = await jpgresp;
 
-        if (pngdata.statusText == "The specified blob does not exist." && jpegdata.statusText == "The specified blob does not exist." ) {
+        if (pngdata.statusText == "The specified blob does not exist." && jpgdata.statusText == "The specified blob does not exist." ) {
         success = false;
         context.log("Does not exist: " + pngdata)
-        context.log("Does not exist: " + jpegdata)
+        context.log("Does not exist: " + jpgdata)
         } else if (pngdata.statusText != "The specified blob does not exist.") {
         success = true;
         download = downloadpng
         context.log("Does exist: " + pngdata)
-        } else if (jpegdata.statusText != "The specified blob does not exist.") {
+        } else if (jpgdata.statusText != "The specified blob does not exist.") {
         success = true;
-        download = downloadjpeg
-        context.log("Does exist: " + jpegdata)
+        download = downloadjpg
+        context.log("Does exist: " + jpgdata)
         }
      
         context.res = {
