@@ -8,8 +8,8 @@ module.exports = async function (context, req) {
     let success;
 
     let downloadpng = "https://bunnimage.blob.core.windows.net/images/" + username + ".png";
-    let downloadjpg = "https://bunnimage.blob.core.windows.net/images/" + username + ".jpg";
-    let downloadjpeg = "https://bunnimage.blob.core.windows.net/images/" + username + ".jpeg";
+    let downloadjpeg = "https://bunnimage.blob.core.windows.net/images/" + username + ".jpg";
+    let downloadjpg = "https://bunnimage.blob.core.windows.net/images/" + username + ".jpeg";
 
     let pngresp = await fetch(downloadpng, {
         method: 'GET',
