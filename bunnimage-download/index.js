@@ -56,4 +56,6 @@ module.exports = async function (context, req) {
     };
     context.log(download);
     context.done();
+
+    
 }
