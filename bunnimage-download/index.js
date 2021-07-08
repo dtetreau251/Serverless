@@ -23,16 +23,15 @@ module.exports = async function (context, req) {
      // check which one is valid
      if (pngdata.statusText == "The specified blob does not exist." && jpgdata.statusText == "The specified blob does not exist." ) {
         success = false;
-        console.log("Does not exist: " + pngdata)
-        console.log("Does not exist: " + jpgdata)
+        context.log("Does not exist: " + data)
      } else if (pngdata.statusText != "The specified blob does not exist.") {
         success = true;
         download = downloadpng
-        console.log("Does exist: " + pngdata)
+        context.log("Does exist: " + data)
      } else if (jpgdata.statusText != "The specified blob does not exist.") {
         success = true;
         download = downloadjpg
-        console.log("Does exist: " + jpgdata)
+        context.log("Does exist: " + data)
      }
 
     context.res = {
