@@ -35,13 +35,11 @@ module.exports = async function (context, req) {
         console.log("Does exist: " + jpgdata)
      }
 
-    context.res = {
-        // status: 200, /* Defaults to 200 */
-        body: {
-            body: {
-                "downloadUri": download,
-                "success": success
-            }
-        }
-    };
+     context.res = { 
+      // status: 200, /* Defaults to 200 */ "
+           body: { 
+                 "downloadUri": download, 
+                 "success": success 
+          } 
+      };
 }
