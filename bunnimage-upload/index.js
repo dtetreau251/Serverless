@@ -7,29 +7,26 @@ module.exports = async function (context, req) {
     context.log(connectionString)
 
     var responseMessage = "";
-    try {
-        var password = req.headers['codename'];
-        var boundary = multipart.getBoundary(req.headers['content-type']);
-        var body = req.body;
-        var parsedBody = multipart.Parse(body, boundary);
-        var filetype = parsedBody[0].type;
-        if (filetype == "image/png") {
-            ext = "png";
-        } else if (filetype == "image/jpeg") {
-            ext = "jpeg";
-        } else if (filetype == "image/jpg") {
-            ext = "jpg"
-        } else {
-            username = "invalidimage"
-            ext = "";
-        }
-        
-        responseMessage = await uploadFile(parsedBody, ext, password);
-        
-    } catch(err) {
-        context.log("Undefined bodu image");
-        responseMessage = "Sorry! No image attached.";
+    var password = req.headers['codename'];
+    var boundary = multipart.getBoundary(req.headers['content-type']);
+    var body = req.body;
+    var parsedBody = multipart.Parse(body, boundary);
+    var filetype = parsedBody[0].type;
+
+    if (filetype == "image/png") {
+        ext = "png";
+    } else if (filetype == "image/jpeg") {
+        ext = "jpeg";
+    } else if (filetype == "image/jpg") {
+        ext = "jpg"
+    } else {
+        username = "invalidimage"
+        ext = "";
     }
+        
+    responseMessage = await uploadFile(parsedBody, ext, password);
+    context.log("Undefined body image");
+    responseMessage = "Sorry! No image attached.";
 
     context.res = {
         body: responseMessage
@@ -43,5 +40,5 @@ async function uploadFile(parsedBody, ext, password) {
     const blobName = password + "." + ext;    // Create the container
     const blockBlobClient = containerClient.getBlockBlobClient(blobName); // Get a block blob client
     const uploadBlobResponse = await blockBlobClient.upload(parsedBody[0].data, parsedBody[0].data.length);
-    return uploadBlobResponse;
+    return ("Your blob has been saved");
 }
