@@ -1,35 +1,45 @@
-var multipart = require("parse-multipart")
-const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
-const { BlobServiceClient } = require("@azure/storage-blob");
-
-module.exports = async function (context, req) {
+var fetch = require("node-fetch");
+module.exports = async function (context, req, password) {
     context.log('JavaScript HTTP trigger function processed a request.');
-        
-    var responseMessage = ""
 
-    try {
-        var password = req.headers['codename'];
-        var boundary = multipart.getBoundary(req.headers['content-type']);
-        var body = req.body;
-        var parsedBody = multipart.Parse(body, boundary);
-        var filetype = parsedBody[0].type;
-        if (filetype == "image/png") {
-            ext = "png";
-        } else if (filetype == "image/jpeg") {
-            ext = "jpg";
-        } else {
-            username = "invalidimage"
-            ext = "";
-        }
-        var responseMessage = await uploadFile(parsedBody, ext, password);
-    } catch(err) {
-        context.log("Undefined body image");
-        responseMessage = "Sorry! No image attached."
+    var username = req.headers['username'];
+    var download = ""
+    var downloadpng = "https://bunnimage.blob.core.windows.net/images/" + username + ".png";
+    var downloadjpg = "https://bunnimage.blob.core.windows.net/images/" + username + ".jpeg";
+// replace with your own blob storage URL and make sure to make the container public!
+    
+    let pngresp = await fetch(downloadpng, {
+        method: 'GET',
+    })
+    let pngdata = await pngresp;
+    
+    let jpgresp = await fetch(downloadjpg, {
+        method: 'GET',
+    })
+    let jpgdata = await jpgresp;
+    
+    if (pngdata.statusText == "The specified blob does not exist." && jpgdata.statusText == "The specified blob does not exist." ) {
+        success = false;
+    } else if (pngdata.statusText != "The specified blob does not exist.") {
+        success = true;
+        download = downloadpng
+    } else if (jpgdata.statusText != "The specified blob does not exist.") {
+        success = true;
+        download = downloadjpg
     }
 
     context.res = {
-        body: responseMessage
-    }; 
+            body: {
+                    "downloadUri" : download,
+                    "success": success,
+            }
+    };
+
+
+    // receive the response
+
+    context.log(download);
+    context.done();
 }
 
 async function uploadFile(parsedBody, ext, password) {
