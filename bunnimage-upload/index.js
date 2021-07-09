@@ -1,53 +1,51 @@
-var fetch = require("node-fetch");
-module.exports = async function (context, req, password) {
-    context.log('JavaScript HTTP trigger function processed a request.');
+var multipart = require("parse-multipart")
+const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+const { BlobServiceClient } = require("@azure/storage-blob");
 
-    var username = req.headers['username'];
-    var download = ""
-    var downloadpng = "https://bunnimage.blob.core.windows.net/images/" + username + ".png";
-    var downloadjpg = "https://bunnimage.blob.core.windows.net/images/" + username + ".jpeg";
-// replace with your own blob storage URL and make sure to make the container public!
-    
-    let pngresp = await fetch(downloadpng, {
-        method: 'GET',
-    })
-    let pngdata = await pngresp;
-    
-    let jpgresp = await fetch(downloadjpg, {
-        method: 'GET',
-    })
-    let jpgdata = await jpgresp;
-    
-    if (pngdata.statusText == "The specified blob does not exist." && jpgdata.statusText == "The specified blob does not exist." ) {
-        success = false;
-    } else if (pngdata.statusText != "The specified blob does not exist.") {
-        success = true;
-        download = downloadpng
-    } else if (jpgdata.statusText != "The specified blob does not exist.") {
-        success = true;
-        download = downloadjpg
+module.exports = async function (context, req) {
+    context.log('JavaScript HTTP trigger function processed a request.');
+    var boundary = multipart.getBoundary(req.headers['content-type']);
+    var body = req.body;
+    var responseMessage = ""
+
+    try {
+        var parsedBody = multipart.Parse(body, boundary);
+        var filetype = parsedBody[0].type;
+        if (filetype == "image/png") {
+            ext = "png";
+        } else if (filetype == "image/jpeg") {
+            ext = "jpeg";
+        } else if (filetype == "image/jpg") {
+            ext = "jpg"
+        } else {
+            username = "invalidimage"
+            ext = "";
+        }
+        var password = req.headers['codename'];
+        responseMessage = await uploadFile(parsedBody, password, ext);
+    }
+    catch(err) {
+        context.log(err)
+        context.log("Undefined body image");
+        responseMessage = "Sorry! No image attached."
     }
 
     context.res = {
-            body: {
-                    "downloadUri" : download,
-                    "success": success,
-            }
+        body: responseMessage
     };
-
-
-    // receive the response
-
-    context.log(download);
-    context.done();
+    console.log(responseMessage)
 }
 
-async function uploadFile(parsedBody, ext, password) {
+async function uploadFile(parsedBody, password, ext){
     const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
     const containerName = "images";
-    const containerClient = blobServiceClient.getContainerClient(containerName);    // Get a reference to a container
-    const blobName = password + "." + ext;    // Create the container
-    const blockBlobClient = containerClient.getBlockBlobClient(blobName); // Get a block blob client
+    console.log('\nCreating container...');
+    console.log('\t', containerName);
+    const containerClient = blobServiceClient.getContainerClient(containerName);
+    const blobName = password + '.' + ext;
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+    console.log('\nUploading to Azure storage as blob:\n\t', blobName);
     const uploadBlobResponse = await blockBlobClient.upload(parsedBody[0].data, parsedBody[0].data.length);
-    return ("Your blob has been saved");
+    console.log("Blob was uploaded successfully. requestId: ", uploadBlobResponse.requestId);
+    return "File Saved";    
 }
