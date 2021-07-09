@@ -4,28 +4,28 @@ const { BlobServiceClient } = require("@azure/storage-blob");
 
 module.exports = async function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
-    context.log(connectionString)
-
-    var password = req.headers['codename'];
-    var boundary = multipart.getBoundary(req.headers['content-type']);
-    var body = req.body;
-    var parsedBody = multipart.Parse(body, boundary);
-    var filetype = parsedBody[0].type;
-
-    if (filetype == "image/png") {
-        ext = "png";
-    } else if (filetype == "image/jpeg") {
-        ext = "jpeg";
-    } else if (filetype == "image/jpg") {
-        ext = "jpg"
-    } else {
-        username = "invalidimage"
-        ext = "";
-    }
         
-    var responseMessage = await uploadFile(parsedBody, ext, password);
-    context.log("Undefined body image");
-    responseMessage = "Sorry! No image attached.";
+    var responseMessage = ""
+
+    try {
+        var password = req.headers['codename'];
+        var boundary = multipart.getBoundary(req.headers['content-type']);
+        var body = req.body;
+        var parsedBody = multipart.Parse(body, boundary);
+        var filetype = parsedBody[0].type;
+        if (filetype == "image/png") {
+            ext = "png";
+        } else if (filetype == "image/jpeg") {
+            ext = "jpg";
+        } else {
+            username = "invalidimage"
+            ext = "";
+        }
+        var responseMessage = await uploadFile(parsedBody, ext password);
+    } catch(err) {
+        context.log("Undefined body image");
+        responseMessage = "Sorry! No image attached."
+    }
 
     context.res = {
         body: responseMessage
@@ -34,7 +34,7 @@ module.exports = async function (context, req) {
 
 async function uploadFile(parsedBody, ext, password) {
     const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
-    const containerName = process.env.CONTAINER_NAME;
+    const containerName = "images";
     const containerClient = blobServiceClient.getContainerClient(containerName);    // Get a reference to a container
     const blobName = password + "." + ext;    // Create the container
     const blockBlobClient = containerClient.getBlockBlobClient(blobName); // Get a block blob client
