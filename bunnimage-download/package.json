@@ -1,5 +1,5 @@
 {
-  "name": "emotionalgifs",
+  "name": "bunnimage-download",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -9,8 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "node-fetch": "^2.6.1",
-    "parse-multipart": "^1.0.4"
+    "node-fetch": "^2.6.1"
   },
   "devDependencies": {},
   "description": ""
