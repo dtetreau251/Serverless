@@ -6,7 +6,6 @@ module.exports = async function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
     context.log(connectionString)
 
-    var responseMessage = "";
     var password = req.headers['codename'];
     var boundary = multipart.getBoundary(req.headers['content-type']);
     var body = req.body;
@@ -24,7 +23,7 @@ module.exports = async function (context, req) {
         ext = "";
     }
         
-    responseMessage = await uploadFile(parsedBody, ext, password);
+    var responseMessage = await uploadFile(parsedBody, ext, password);
     context.log("Undefined body image");
     responseMessage = "Sorry! No image attached.";
 
