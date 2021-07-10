@@ -11,7 +11,7 @@ module.exports = async function (context, myTimer, req) {
         headers: {"Content-type": "application/octet-stream"}
     });
     
-    let boundary = headers
+    let boundary = {"Content-type": "application/octet-stream"}
     let data = await resp.arrayBuffer()
     context.log(data)
     data = Buffer.from(data).toString('base64')
