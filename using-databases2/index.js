@@ -14,20 +14,18 @@ module.exports = async function (context, myTimer, req) {
     let data = await resp.arrayBuffer()
     context.log(data)
     data = Buffer.from(data).toString('base64')
-    let cat = await getCatPic()
  
     context.res = {
         // status: 200, /* Defaults to 200 */
         body: {
-            cat: cat
+            cat: data
         }
     };
 
     context.log('JavaScript HTTP trigger function processed a request.');
-    var body = cat;
+    var body = data;
     var parsedBody = multipart.Parse(body, boundary);
     context.log(parsedBody);
-        
     var filetype = parsedBody[0].type;
     if (filetype == "image/png") {
         ext = "png";
