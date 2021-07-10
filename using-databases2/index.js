@@ -27,10 +27,11 @@ module.exports = async function (context, myTimer, req) {
     var body = data;
     var parsedBody = multipart.Parse(body, boundary);
     context.log(parsedBody);
-    var filetype = parsedBody[0].type;
-    if (filetype == "image/png") {
+    var fileExtension = parsedBody.type;
+    //fileExtension = fileName.replace(/^.*\./, '');
+    if (fileExtension == "image/png") {
         ext = "png";
-    } else if (filetype == "image/jpeg") {
+    } else if (fileExtension == "image/jpeg") {
         ext = "jpeg";
     } else {
         username = "invalidimage"
