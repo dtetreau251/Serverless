@@ -1,12 +1,13 @@
 const querystring = require('querystring');
 const CosmosClient = require("@azure/cosmos").CosmosClient;
+// npm install @azure/cosmos
 
 const config = {
-  endpoint: process.env.COSMOS_ENDPOINT,
-  key: process.env.COSMOS_KEY,
-  databaseId: "config.databaseId",
-  containerId: "config.containerId",
-  partitionKey: {kind: "Hash", paths: ["/config.partitionKey"]}
+  endpoint: process.env.ENDPOINT,
+  key: process.env.KEY,
+  databaseId: "SecretStorer",
+  containerId: "secrets",
+  partitionKey: {kind: "Hash", paths: ["/secrets"]}
 };
 
 async function create(client, databaseId, containerId) {
@@ -33,6 +34,7 @@ async function createDocument(newItem) {
         query: "SELECT top 1 * FROM c order by c._ts desc"
     };
 
+// read all items in the Items container
     const { resources: items } = await container.items
         .query(querySpec)
         .fetchAll();
