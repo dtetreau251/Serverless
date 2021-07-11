@@ -2,8 +2,8 @@ const querystring = require('querystring');
 const CosmosClient = require("@azure/cosmos").CosmosClient;
 
 const config = {
-  endpoint: process.env.ENDPOINT,
-  key: process.env.KEY,
+  endpoint: process.env.COSMOS_ENDPOINT,
+  key: process.env.COSMOS_KEY,
   databaseId: "config.databaseId",
   containerId: "config.containerId",
   partitionKey: {kind: "Hash", paths: ["/config.partitionKey"]}
