@@ -4,9 +4,9 @@ const CosmosClient = require("@azure/cosmos").CosmosClient;
 const config = {
   endpoint: process.env.ENDPOINT,
   key: process.env.KEY,
-  databaseId: "SecretStorer",
-  containerId: "secrets",
-  partitionKey: {kind: "Hash", paths: ["/secrets"]}
+  databaseId: "config.databaseId",
+  containerId: "config.containerId",
+  partitionKey: {kind: "Hash", paths: ["/config.partitionKey"]}
 };
 
 async function create(client, databaseId, containerId) {
