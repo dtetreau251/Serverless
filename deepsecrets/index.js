@@ -6,7 +6,7 @@ const config = {
   key: process.env.KEY,
   databaseId: "config.databaseId",
   containerId: "config.containerId",
-  partitionKey: {kind: "Hash", paths: ["config.partitionKey"]}
+  partitionKey: {kind: "Hash", paths: ["/config.partitionKey"]}
 };
 
 async function create(client, databaseId, containerId) {
