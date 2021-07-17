@@ -1,4 +1,4 @@
-function y1k3s() {
+async function y1k3s() {
     let url = `${process.env.TWOCATZ_ENDPOINT}&name1=${document.getElementById("name1").value}&name2=${document.getElementById("name2").value}&name3=${document.getElementById("name3").value}&name4=${document.getElementById("name4").value}`
     let resp = await fetch(url, {
         method: 'GET'
