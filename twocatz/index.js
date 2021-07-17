@@ -9,11 +9,12 @@ module.exports = async function (context, req) {
     let name4 = req.query.name4
 
     async function getCatPic(name) {
-        let resp = await fetch("https://cataas.com/cat/says/" + name, { method: "GET" });
+        let resp = await fetch("https://cataas.com/cat/says/" + name, { 
+            method: "GET" 
+        });
         let data = await resp.arrayBuffer();
-
-        let base64data = Buffer.from(data).toString('base64');
-        return base64data
+        data = Buffer.from(data).toString('base64');
+        return data
     }
 
     let firstcat = await getCatPic(name1)
