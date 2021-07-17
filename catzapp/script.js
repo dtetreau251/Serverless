@@ -6,8 +6,8 @@ async function y1k3s() {
     
     let result = await resp.json()
 
-    document.getElementById("image1").src = "data:image/png;base64," + result.cat1
-    document.getElementById("image2").src = "data:image/png;base64," + result.cat2
-    document.getElementById("image3").src = "data:image/png;base64," + result.cat3
-    document.getElementById("image4").src = "data:image/png;base64," + result.cat4
+    document.getElementById("image1").src = "data:image/jpeg;base64," + result.cat1
+    document.getElementById("image2").src = "data:image/jpeg;base64," + result.cat2
+    document.getElementById("image3").src = "data:image/jpeg;base64," + result.cat3
+    document.getElementById("image4").src = "data:image/jpeg;base64," + result.cat4
   }
