@@ -1,5 +1,5 @@
 
-function getImage(event) {
+async function getImage(event) {
     event.preventDefault()
     const myform = document.getElementById("myform");
     const nameInput = document.getElementById("name");
