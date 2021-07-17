@@ -1,5 +1,5 @@
 
-async function getImage(event) {
+function getImage(event) {
     event.preventDefault()
     const myform = document.getElementById("myform");
     const nameInput = document.getElementById("name");
@@ -16,7 +16,7 @@ async function getImage(event) {
             const url = process.env.BUNNIMAGE_ENDPOINT;
             console.log("Image was uploaded, making POST request to Azure function")
 
-            const resp = await fetch(url, {
+            const resp = fetch(url, {
                 method: 'POST',
                 headers: {
                     'codename': nameInput.value
