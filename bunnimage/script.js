@@ -1,34 +1,34 @@
 
-function getImage(event) {
+async function getImage(event) {
     event.preventDefault()
     const myform = document.getElementById("myform");
-    const nameInput = document.getElementById("name");
-    const fileInput = document.getElementById("image");
-    const file = fileInput.files[0];
-
     const payload = new FormData(myform);
     console.log(payload);
-    payload.append("file", file);
+    var username = document.getElementById("username").value;
 
-    if (document.getElementById('name').value != '') {
+    if (username.value != '') {
+        $('#output').text("Thanks!")
+
+        console.log("Posting your image...");
 
         try {
             const url = "https://bunnimage-upload.azurewebsites.net/api/bunnimage-upload";
             console.log("Image was uploaded, making POST request to Azure function")
 
-            const resp = fetch(url, {
+            const resp = await fetch(url, {
                 method: 'POST',
                 headers: {
-                    'codename': nameInput.value
+                    'codename': username.value
                 },
                 body: payload
             })
-            console.log("POST request was made successfully")
+
+            var data = await resp.text();
+            console.log(data);
             $('#output').text("Your image has been stored successfully!")
         } catch(err) {
             $('#output').text(err)
         }
-
     } else {
         alert("No name error.")
     }
