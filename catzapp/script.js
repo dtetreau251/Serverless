@@ -1,5 +1,5 @@
 async function y1k3s() {
-    let url = `https://twocatz3.azurewebsites.net/api/twocatz?code=QBYPJUql5Cq4jrXqar818wFHYMcKAk0lduRGRzDAhQFV6MgkO8pZFg==name1=${document.getElementById("name1").value}&name2=${document.getElementById("name2").value}&name3=${document.getElementById("name3").value}&name4=${document.getElementById("name4").value}`
+    let url = `https://twocatz3.azurewebsites.net/api/twocatz?name1=${document.getElementById("name1").value}&name2=${document.getElementById("name2").value}&name3=${document.getElementById("name3").value}&name4=${document.getElementById("name4").value}`
     let resp = await fetch(url, {
         method: 'GET'
     });
