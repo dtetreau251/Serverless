@@ -3,6 +3,11 @@ fetch = require('node-fetch')
 module.exports = async function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
 
+    let name1 = req.query.name1
+    let name2 = req.query.name2
+    let name3 = req.query.name3
+    let name4 = req.query.name4
+
     async function getCat() {
         let resp = await fetch("https://cataas.com/cat/says/Serverless", { method: "GET" });
         let data = await resp.arrayBuffer();
@@ -11,30 +16,18 @@ module.exports = async function (context, req) {
         return base64data
     }
 
-    function getNames(arr) {
-        return arr[Math.floor(Math.random()*arr.length)];
-    }
-
-    let cats = [];
-    let avaNames = ["Shreya", "Emily", "Fifi", "Beau", "Evelyn", "Julia", "Daniel", "Fardeen"];
-    let chosenNames = [];
-
-    for (var i=0; i<2; i++) {
-        cats.push(await getCat());
-    }
-
-    for (var i=0; i<2; i++) {
-        chosenNames.push(getNames(avaNames))
-    }
-
+    let firstcat = await getCatPic(name1)
+    let secondcat = await getCatPic(name2)
+    let thirdcat = await getCatPic(name3)
+    let fourthcat = await getCatPic(name4)
 
     context.res = {
         // status: 200, /* Defaults to 200 */
         body: {
-            cat1: cats[0],
-            cat2: cats[1],
-            names: [chosenNames[0], chosenNames[1]]
+            cat1: firstcat,
+            cat2: secondcat,
+            cat3: thirdcat,
+            cat4: fourthcat
         }
-
     };
 }
