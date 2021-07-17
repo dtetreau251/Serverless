@@ -23,6 +23,7 @@ function getImage(event) {
                 },
                 body: payload
             })
+            console.log("POST request was made successfully")
             $('#output').text("Your image has been stored successfully!")
         } catch(err) {
             $('#output').text(err)
