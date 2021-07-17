@@ -8,7 +8,7 @@ module.exports = async function (context, req) {
     let name3 = req.query.name3
     let name4 = req.query.name4
 
-    async function getCatPic(name) {
+    async function getCat(name) {
         let resp = await fetch("https://cataas.com/cat/says/" + name, { 
             method: "GET" 
         });
@@ -17,10 +17,10 @@ module.exports = async function (context, req) {
         return data
     }
 
-    let firstcat = await getCatPic(name1)
-    let secondcat = await getCatPic(name2)
-    let thirdcat = await getCatPic(name3)
-    let fourthcat = await getCatPic(name4)
+    let firstcat = await getCat(name1)
+    let secondcat = await getCat(name2)
+    let thirdcat = await getCat(name3)
+    let fourthcat = await getCat(name4)
 
     context.res = {
         // status: 200, /* Defaults to 200 */
