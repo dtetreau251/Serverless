@@ -13,8 +13,8 @@ module.exports = async function (context, req) {
             method: "GET" 
         });
         let data = await resp.arrayBuffer();
-        data = Buffer.from(data).toString('base64');
-        return data
+        var base64data = Buffer.from(data).toString('base64');
+        return base64data
     }
 
     let firstcat = await getCat(name1)
