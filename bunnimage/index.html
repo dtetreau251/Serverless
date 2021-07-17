@@ -6,17 +6,20 @@
     <title>The best form</title>
   </head>
   <body>
-      <div>
-              <h1 id="h1">Give your code some love ❤️</h1>
-              <form id="myform" onsubmit="getImage(event)" enctype="multipart/form-data">
-                  <input type="file" accept="image/x-png, image/jpg" name="image" id="image"></input>
-                  <input type="text" id="username" name="username" placeholder="Enter your file's name" /><br>
-                  <input value="Submit" type="submit" />
-              </form>
-              <br/>
-              <div id="output"></div>
-        </div>
-    </body>  
+    <div>
+      <h1 id="h1">Give your code some love ❤️</h1>
+      <form id="myform" onsubmit="getImage(event)" enctype="multipart/form-data">
+          <input type="file" accept="image/x-png, image/jpg" name="image" id="image"></input>
+          <input type="text" id="username" name="username" placeholder="Enter your file's name" /><br>
+          <input value="Submit" type="submit" id="button1" />
+          <br>
+          <input value="Submit" type="submit" id="downloadusername" />
+          <input id="button2" type="submit" type="button" value="download" onclick="downloadImage()"></button>
+      </form>
+      <br/>
+      <div id="output"></div>
+    </div>
+  </body>  
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>

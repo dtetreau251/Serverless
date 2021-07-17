@@ -33,3 +33,25 @@ async function getImage(event) {
         alert("No name error.")
     }
 }
+
+function downloadImage() {
+    let username = document.getElementById("downladusername".value)
+    if(document.getElementById("downloadusername".value != '')) {
+        let url = "https://bunnimage-download2.azurewebsites.net/api/bunnimage-download"
+        
+        console.log("Got file name, making GET request to download image")
+
+        const resp = fetch(url, {
+            method: 'GET',
+            header: {
+               'username': username
+            }
+        })
+
+        console.log("Made GET request successfully")
+
+        window.open(resp, _self)
+    } else {
+        alert("No name error.")
+    }
+}
