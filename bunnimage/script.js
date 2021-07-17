@@ -13,7 +13,7 @@ function getImage(event) {
     if (document.getElementById('name').value != '') {
 
         try {
-            const url = process.env.BUNNIMAGE_ENDPOINT;
+            const url = "https://bunnimage-upload.azurewebsites.net/api/bunnimage-upload?";
             console.log("Image was uploaded, making POST request to Azure function")
 
             const resp = fetch(url, {
