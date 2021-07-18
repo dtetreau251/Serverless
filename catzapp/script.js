@@ -1,17 +1,15 @@
-const fetch = require('node-fetch')
+ async function y1k3s() {
 
-async function y1k3s() {
-
-    let url = `https://twocatz3.azurewebsites.net/api/twocatz?code=QBYPJUql5Cq4jrXqar818wFHYMcKAk0lduRGRzDAhQFV6MgkO8pZFg==&name1=${document.getElementById("name1").value}&name2=${document.getElementById("name2").value}&name3=${document.getElementById("name3").value}&name4=${document.getElementById("name4").value}`
+    let url = `https://twocatz3.azurewebsites.net/api/twocatz?name1=${document.getElementById("name1").value}&name2=${document.getElementById("name2").value}&name3=${document.getElementById("name3").value}&name4=${document.getElementById("name4").value}`
     let resp = await fetch(url, {
-        method: 'GET'
+        method: 'GET',
+        mode: 'no-cors'
     });
-    
+ 
     let result = await resp.json()
-    console.log(result);
 
-    document.getElementById("image1").src = "data:image/jpeg;base64," + result.cat1
-    document.getElementById("image2").src = "data:image/jpeg;base64," + result.cat2
-    document.getElementById("image3").src = "data:image/jpeg;base64," + result.cat3
-    document.getElementById("image4").src = "data:image/jpeg;base64," + result.cat4
+    document.getElementById("image1").src = "data:image/png;base64," + result.cat1
+    document.getElementById("image2").src = "data:image/png;base64," + result.cat2
+    document.getElementById("image3").src = "data:image/png;base64," + result.cat3
+    document.getElementById("image4").src = "data:image/png;base64," + result.cat4
   }
