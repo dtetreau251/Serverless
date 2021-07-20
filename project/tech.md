@@ -33,22 +33,7 @@ Content Moderator
 - Makes conversations more human-like
 (personal assistant)
 
-### Front-end Languages
-
-**HTML**
-
-- Provides the structure of the page
-- Interacts with CSS. CSS styles the
-page created by the HTML.
-
-**CSS**
-
-- Styles the page
-- Interacts with CSS. CSS styles the
-page created by the HTML.
-
-**JavaScript**
-Makes the web app interactive 
+### Languages
 
 **node.js**
 - Enhances the basic bot template
