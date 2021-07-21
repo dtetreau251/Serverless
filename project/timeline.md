@@ -54,6 +54,7 @@
 [ ] [Add alternate questions]
 [ ] [Add new answers]
 [ ] [Select Save and Train to persist this answer.]
+<--week 1 complete-->
 
 ## Week 3
 ### Publish and Connect to Conversation Channels:
