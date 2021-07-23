@@ -10,6 +10,7 @@ The project use QnAMaker. This is a resource which eases the difficulty of makin
 **These instructions were adapted from these documents**
 [Connect a bot to Twilio](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-channel-connect-twilio?view=azure-bot-service-4.0)
 [Quickstart: Create, train, and publish your QnA Maker knowledge base](https://docs.microsoft.com/en-us/azure/cognitive-services/QnAMaker/Quickstarts/create-publish-knowledge-base?tabs=v1)
+[Medium](https://medium.com/coinmonks/how-to-make-a-q-a-chatbot-with-machine-learning-1c90207bde7b)
 
 1. Sign into the QnAMaker.ai portal with Azure credentials (student credentials if you are a student).
 2. In the QnA Maker portal, create a knowledge base.
