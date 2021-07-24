@@ -4,13 +4,19 @@ require("dotenv").config();
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
-  // socketMode:true, enable to use socket mode
-  // appToken: process.env.APP_TOKEN
+   socketMode:true, //enable to use socket mode
+   appToken: process.env.APP_TOKEN
 });
 
 const fs = require("fs");
 let raw = fs.readFileSync("db.json");
 let faqs = JSON.parse(raw);
+
+// Listens to incoming messages that contain "hello"
+app.message('hello', async ({ message, say }) => {
+  // say() sends a message to the channel where the event was triggered
+  await say(`Hey there <@${message.user}>!`);
+});
 
 app.command("/knowledge", async ({ command, ack, say }) => {
   try {
@@ -55,11 +61,10 @@ app.command("/knowledge", async ({ command, ack, say }) => {
   }
 });
 
-
 app.message(/Error/, async ({ command, say }) => {
   try {
     let message = { blocks: [] };
-    const productsFAQs = faqs.data.filter((faq) => faq.keyword === "error");
+    const errorFAQs = faqs.data.filter((faq) => faq.keyword === "error");
 
     errorFAQs.map((faq) => {
       message.blocks.push(
