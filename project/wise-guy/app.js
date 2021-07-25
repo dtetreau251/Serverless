@@ -14,79 +14,97 @@ let faqs = JSON.parse(raw);
 let data = faqs.data;
 let keywords = ''
 
-app.message(/^(hi|hello|hey).*/, async ({ message, say }) => {
-    // say() sends a message to the channel where the event was triggered
-    await say({
-      blocks: [
-        {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": `Hey there <@${message.user}>. What can I help you with?`
-          }
-        }
-      ],
-      text: `Hey there <@${message.user}>. What can I help you with? `
-    });
-    keywords = '';
+for(let i = 0; i < data.length; i++) {
+  keywords += data[i].keyword + " ";
+}
 
-    for(let i = 0; i < data.length; i++) {
-      keywords += data[i].keyword + " "; 
-    }
-  });
 
-  app.message(`${keywords}`, async ({ message, say }) => {
-    // say() sends a message to the channel where the event was triggered
-    let text;
-    keywords = '';
+app.message(async ({ message, say }) => {
+  // say() sends a message to the channel where the event was triggered
+  let text = '';
+  keywords = '';
 
-    for(let i = 0; i < data.length; i++) {
-      keywords += data[i].keyword + " ";
-      if(message.text.includes(data[i].keyword) && text == undefined) {
-          text = data[i].answer
-      } 
-    }
-      // say() sends a message to the channel where the event was triggered
-    await say({
-      blocks: [
-        {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": `${text} ...Does this help?`
+  for(let i = 0; i < data.length; i++) {
+    keywords += data[i].keyword + " ";
+    if(message.text.includes(data[i].keyword) && text == '') {
+        text += data[i].answer
+    } else if(message.text.includes(data[i].keyword) && text != '') {
+        text += "Also, " + data[i].answer;
+    } 
+  }
+      await say({
+        "blocks": [
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": `${text}`
+            }
           },
-        "accessory": {
-          "type": "button",
-          "text": {
-            "type": "plain_text",
-            "text": "No"
+          {
+            "type": "divider"
           },
-          "action_id": "button_click_no"
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": `Did this answer your question?`
+            }
+         },
+        {
+          "type": "actions",
+          "elements": [
+            {
+              "type": "button",
+              "text": {
+                "type": "plain_text",
+                "text": "Yes",
+                "emoji": true
+              },
+              "value": "click_me_123",
+              "action_id": "button_click_yes"
+            },
+            {
+              "type": "button",
+              "text": {
+                "type": "plain_text",
+                "text": "No",
+                "emoji": true
+              },
+              "value": "click_me_123",
+              "action_id": "button_click_no"
+            }
+          ]
         },
-        "accessory": {
-          "type": "button",
-          "text": {
-            "type": "plain_text",
-            "text": "Yes"
-          },
-          "action_id": "button_click_yes"
-        }
-      }
-    ],
-    text: `Hey there <@${message.user}>!`
-  });
+      ]//blocks
+    });//say
+// say() sends a message to the channel where the event was triggered   
 });
 
 app.action('button_click_yes', async ({ body, ack, say }) => {
   // Acknowledge the action
   await ack();
-  await say(`Ok great!`);
+  await say(`Ok great!🎉🎉`);
 });
 
 app.action('button_click_no', async ({ body, ack, say }) => {
   // Acknowledge the action
   await ack();
-  await say(`Try rephrasing your question. If this doesn't help, message an instructor or other students for help. Don't forget to use /update if you find the answer so I will know how to help next time.`);
+  await say({
+    "blocks": [
+      {
+        "type": "divider"
+      },
+      {
+        "type": "section",
+        "text": {
+          "type": "plain_text",
+          "text": "Try asking in a different way. If this doesn't work, ask another student or an instructor for help. Don't forget to update me with /update so I will know the answer too!",
+          "emoji": true
+        }
+      }
+    ]
+  })
 });
 
 app.command("/knowledge", async ({ command, ack, say }) => {
@@ -180,7 +198,8 @@ app.message(/Error/, async ({ command, say }) => {
 app.command("/update", async ({ command, ack, say }) => {
   try {
     await ack();
-    const data = command.text.split("|");
+    let text = command.text.toLowerCase();
+    const data = text.split("|");
 
     const newFAQ = {
       keyword: data[0].trim(),
@@ -199,11 +218,6 @@ app.command("/update", async ({ command, ack, say }) => {
     });
 
     say(`You've added a new FAQ with the keyword *${newFAQ.keyword}.*`);
-    keywords = '';
-
-    for(let i = 0; i < data.length; i++) {
-      keywords += data[i].keyword + " "; 
-    }
      
   } catch (error) {
     console.log("err");
