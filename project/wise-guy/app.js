@@ -12,8 +12,7 @@ const fs = require("fs");
 let raw = fs.readFileSync("db.json");
 let faqs = JSON.parse(raw);
 let data = faqs.data;
-let keywords = data.map(data.keyword);
-console.log(keywords);
+let keywords = ''
 
 app.message(/^(hi|hello|hey).*/, async ({ message, say }) => {
     // say() sends a message to the channel where the event was triggered
@@ -29,6 +28,11 @@ app.message(/^(hi|hello|hey).*/, async ({ message, say }) => {
       ],
       text: `Hey there <@${message.user}>. What can I help you with? `
     });
+    keywords = '';
+
+    for(let i = 0; i < data.length; i++) {
+      keywords += data[i].keyword + " "; 
+    }
   });
 
   app.message(`${keywords}`, async ({ message, say }) => {
