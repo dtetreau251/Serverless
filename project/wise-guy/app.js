@@ -23,25 +23,23 @@ app.message(/^(hi|hello|hey).*/, async ({ message, say }) => {
           "type": "section",
           "text": {
             "type": "mrkdwn",
-            "text": `Hey there <@${message.user}>. What can I help with?`
+            "text": `Hey there <@${message.user}>. What can I help you with?`
           }
         }
       ],
-      text: `Hey there <@${message.user}>. `
+      text: `Hey there <@${message.user}>. What can I help you with? `
     });
   });
 
   app.message(`${keywords}`, async ({ message, say }) => {
     // say() sends a message to the channel where the event was triggered
     let text;
-    let iteration;
     keywords = '';
 
     for(let i = 0; i < data.length; i++) {
       keywords += data[i].keyword + " ";
       if(message.text.includes(data[i].keyword) && text == undefined) {
           text = data[i].answer
-          iteration = i;
       } 
     }
       // say() sends a message to the channel where the event was triggered
@@ -84,7 +82,7 @@ app.action('button_click_yes', async ({ body, ack, say }) => {
 app.action('button_click_no', async ({ body, ack, say }) => {
   // Acknowledge the action
   await ack();
-  await say(`<@${body.user.id}> Can you help?`);
+  await say(`Try rephrasing your question. If this doesn't help, message an instructor or other students for help. Don't forget to use /update if you find the answer so I will know how to help next time.`);
 });
 
 app.command("/knowledge", async ({ command, ack, say }) => {
