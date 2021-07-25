@@ -1,10 +1,1 @@
-{"data":
-    [
-        {"keyword":"name",
-            "question":"What is your name?",
-            "answer":"My name is Wise Guy. I'm here to help."},
-        {"keyword":"creator",
-            "question":"Who is your creator?",
-            "answer":"David Tetreau"}
-    ]
-}
+{"data":[{"keyword":"name","question":"What is your name?","answer":"My name is Wise Guy. I'm here to help."},{"keyword":"creator","question":"Who is your creator?","answer":"David Tetreau"},{"keyword":"Bit Project","question":"What is Bit Project","answer":"Bit Project provides cutting-edge, open source learning experiences to prepare students for careers in tech."}]}

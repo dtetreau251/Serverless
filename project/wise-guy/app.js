@@ -11,11 +11,80 @@ const app = new App({
 const fs = require("fs");
 let raw = fs.readFileSync("db.json");
 let faqs = JSON.parse(raw);
+let data = faqs.data;
+let keywords = data.map(data.keyword);
+console.log(keywords);
 
-// Listens to incoming messages that contain "hello"
-app.message('hello', async ({ message, say }) => {
-  // say() sends a message to the channel where the event was triggered
-  await say(`Hey there <@${message.user}>!`);
+app.message(/^(hi|hello|hey).*/, async ({ message, say }) => {
+    // say() sends a message to the channel where the event was triggered
+    await say({
+      blocks: [
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": `Hey there <@${message.user}>. What can I help with?`
+          }
+        }
+      ],
+      text: `Hey there <@${message.user}>. `
+    });
+  });
+
+  app.message(`${keywords}`, async ({ message, say }) => {
+    // say() sends a message to the channel where the event was triggered
+    let text;
+    let iteration;
+    keywords = '';
+
+    for(let i = 0; i < data.length; i++) {
+      keywords += data[i].keyword + " ";
+      if(message.text.includes(data[i].keyword) && text == undefined) {
+          text = data[i].answer
+          iteration = i;
+      } 
+    }
+      // say() sends a message to the channel where the event was triggered
+    await say({
+      blocks: [
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": `${text} ...Does this help?`
+          },
+        "accessory": {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "No"
+          },
+          "action_id": "button_click_no"
+        },
+        "accessory": {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Yes"
+          },
+          "action_id": "button_click_yes"
+        }
+      }
+    ],
+    text: `Hey there <@${message.user}>!`
+  });
+});
+
+app.action('button_click_yes', async ({ body, ack, say }) => {
+  // Acknowledge the action
+  await ack();
+  await say(`Ok great!`);
+});
+
+app.action('button_click_no', async ({ body, ack, say }) => {
+  // Acknowledge the action
+  await ack();
+  await say(`<@${body.user.id}> Can you help?`);
 });
 
 app.command("/knowledge", async ({ command, ack, say }) => {
@@ -128,6 +197,12 @@ app.command("/update", async ({ command, ack, say }) => {
     });
 
     say(`You've added a new FAQ with the keyword *${newFAQ.keyword}.*`);
+    keywords = '';
+
+    for(let i = 0; i < data.length; i++) {
+      keywords += data[i].keyword + " "; 
+    }
+     
   } catch (error) {
     console.log("err");
     console.error(error);
