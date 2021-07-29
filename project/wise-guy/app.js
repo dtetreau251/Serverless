@@ -18,7 +18,7 @@ for(let i = 0; i < data.length; i++) {
   keywords += data[i].keyword + " ";
 }
 
-const welcomeChannelId = 'C0292JJN675';
+const welcomeChannelId = process.env.WELCOME_CHANNEL_ID;
 
 // When a user joins the team, send a message in a predefined channel asking them to introduce themselves
 app.event('channel_join', async ({ event, client }) => {
@@ -90,7 +90,7 @@ app.message(async ({ message, say }) => {
                 "text": "Yes",
                 "emoji": true
               },
-              "value": "click_me_123",
+              "value": "Yes",
               "action_id": "button_click_yes"
             },
             {
@@ -100,7 +100,7 @@ app.message(async ({ message, say }) => {
                 "text": "No",
                 "emoji": true
               },
-              "value": "click_me_123",
+              "value": "No",
               "action_id": "button_click_no"
             }
           ]
@@ -129,7 +129,7 @@ app.action('button_click_no', async ({ body, ack, say }) => {
         "type": "section",
         "text": {
           "type": "plain_text",
-          "text": "Try asking in a different way. If this doesn't work, enter /ticket to get help. Don't forget to update me with /update so I will know the answer too!",
+          "text": "Try asking in a different way. If this doesn't work, ask for help. Don't forget to update me with /update so I will know the answer too!",
           "emoji": true
         }
       }
@@ -245,11 +245,10 @@ app.command("/update", async ({ command, ack, say }) => {
         if (err) throw err;
         console.log("Successfully saved to db.json!");
       });
-    });
-
+    }); 
     say(`You've added a new FAQ with the keyword *${newFAQ.keyword}.*`);
-     
   } catch (error) {
+    say(`Something went wrong`);
     console.log("err");
     console.error(error);
   }
@@ -257,86 +256,20 @@ app.command("/update", async ({ command, ack, say }) => {
 
 app.command("/delete", async ({ command, ack, say }) => {
   try {
-    await ack();
-    let text = command.text.toLowerCase();
-
-    // save data to db.json
-    fs.readFile("db.json", function (err, data) {
-      for(let i = 0; i < data.length; i++) {
-        if(data[i].keyword == text) {
-          fs.unlinkSync("db.json", data[i] , function (err) {
-            if (err) throw err;
-            console.log("Successfully deleted from db.json!");
-          });
-        }
-      }
-    });
-
+    await ack()
+   const jsonRecords= fs.readFile("db.json", function (err, data) {
+      const records = JSON.parse(jsonRecords)
+      const filteredRecords = records.filter(record => record.id !== id)
+      fs.writeFile("db.json",  JSON.stringify(filteredRecords, null, 2)), function (err) {
+        if (err) throw err;
+        say("Successfully deleted your file.");
+      }; 
+    }); 
+    console.log(jsonRecords)
     say(`You've deleted a FAQ *${text}.*`);
-     
   } catch (error) {
+    say(`There was a problem. Try again.`);
     console.log("err");
-    console.error(error);
-  }
-});
-
-app.command('/ticket', async ({ ack, body, client }) => {
-  // Acknowledge the command request
-  await ack();
-
-  try {
-    // Call views.open with the built-in client
-    const result = await client.views.open({
-      // Pass a valid trigger_id within 3 seconds of receiving it
-      trigger_id: body.trigger_id,
-      // View payload
-      view: {
-        type: 'modal',
-        // View identifier
-        callback_id: 'view_1',
-        title: {
-          type: 'plain_text',
-          text: 'Ask for help'
-        },
-        blocks: [
-          {
-            type: 'section',
-            text: {
-              type: 'mrkdwn',
-              text: 'Ask other students'
-            },
-            accessory: {
-              type: 'button',
-              text: {
-                type: 'plain_text',
-                text: 'Submit!'
-              },
-              action_id: 'button_abc'
-            }
-          },
-          {
-            type: 'input',
-            block_id: 'input_c',
-            label: {
-              type: 'plain_text',
-              text: 'Submit a ticket to instructors.'
-            },
-            element: {
-              type: 'plain_text_input',
-              action_id: 'dreamy_input',
-              multiline: true
-            }
-          }
-        ],
-        submit: {
-          type: 'plain_text',
-          text: 'Submit'
-        }
-      }
-    });
-    console.log(result);
-  }
-  catch (error) {
     console.error(error);
   }
 });
