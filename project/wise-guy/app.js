@@ -13,6 +13,7 @@ let raw = fs.readFileSync("db.json");
 let faqs = JSON.parse(raw);
 let data = faqs.data;
 let keywords = ''
+let timestamp = ''
 
 for(let i = 0; i < data.length; i++) {
   keywords += data[i].keyword + " ";
@@ -26,7 +27,7 @@ app.event('channel_join', async ({ event, client }) => {
     // Call chat.postMessage with the built-in client
     const result = await client.chat.postMessage({
       channel: welcomeChannelId,
-      text: `Welcome to the Wise-Guy channel, <@${event.user.id}>! 🎉 Ask me about the course. You can add questions and answers using /update. You can also ask for help from others using /ticket.`
+      text: `Welcome to the Wise-Guy channel, <@${event.user.id}>! 🎉 Ask me questions about the course. If I don't know the answer, an instructor or fellow students can answer. You can add a keyword, questions, and answers using /update.`
     });
     console.log(result);
   }
@@ -39,6 +40,7 @@ app.message(async ({ message, say }) => {
   // say() sends a message to the channel where the event was triggered
   let text = '';
   keywords = '';
+  timestamp = message.ts;
 
   for(let i = 0; i < data.length; i++) {
     keywords += data[i].keyword + " ";
@@ -58,7 +60,8 @@ app.message(async ({ message, say }) => {
             "text": `${text}`
           }
         }
-      ]
+      ],
+      thread_ts: message.ts,
     });
   } else {
       await say({
@@ -87,7 +90,7 @@ app.message(async ({ message, say }) => {
               "type": "button",
               "text": {
                 "type": "plain_text",
-                "text": "Yes",
+                "text": "Yes 😎",
                 "emoji": true
               },
               "value": "Yes",
@@ -97,7 +100,7 @@ app.message(async ({ message, say }) => {
               "type": "button",
               "text": {
                 "type": "plain_text",
-                "text": "No",
+                "text": "No 🙁",
                 "emoji": true
               },
               "value": "No",
@@ -105,7 +108,8 @@ app.message(async ({ message, say }) => {
             }
           ]
         },
-      ]//blocks
+      ],//blocks
+      thread_ts: message.ts,
     });//say
   }
 // say() sends a message to the channel where the event was triggered   
@@ -114,7 +118,10 @@ app.message(async ({ message, say }) => {
 app.action('button_click_yes', async ({ body, ack, say }) => {
   // Acknowledge the action
   await ack();
-  await say(`Ok great!🎉🎉`);
+  await say({
+    text: `Ok great!🎉🎉`,   
+    thread_ts: timestamp
+  });
 });
 
 app.action('button_click_no', async ({ body, ack, say }) => {
@@ -129,11 +136,12 @@ app.action('button_click_no', async ({ body, ack, say }) => {
         "type": "section",
         "text": {
           "type": "plain_text",
-          "text": "Try asking in a different way. If this doesn't work, ask for help. Don't forget to update me with /update so I will know the answer too!",
+          "text": "I'm calling the calvary 🐴. Don't forget to update me with /update so I will know the answer too!",
           "emoji": true
         }
       }
-    ]
+    ],
+    thread_ts: timestamp
   })
 });
 
@@ -147,46 +155,16 @@ app.command("/knowledge", async ({ command, ack, say }) => {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: "*Question ❓*",
+            text: "*Keyword 🗝*",
           },
         },
         {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: faq.question,
+            text: faq.keyword,
           },
         },
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: "*Answer ✔️*",
-          },
-        },
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: faq.answer,
-          },
-        }
-      );
-    });
-    say(message);
-  } catch (error) {
-    console.log("err");
-    console.error(error);
-  }
-});
-
-app.message(/Error/, async ({ command, say }) => {
-  try {
-    let message = { blocks: [] };
-    const errorFAQs = faqs.data.filter((faq) => faq.keyword === "error");
-
-    errorFAQs.map((faq) => {
-      message.blocks.push(
         {
           type: "section",
           text: {
@@ -214,16 +192,21 @@ app.message(/Error/, async ({ command, say }) => {
             type: "mrkdwn",
             text: faq.answer,
           },
+        },
+        {
+          "type": "divider"
         }
       );
     });
-
-    say(message);
+    
+    say({
+      "blocks": message.blocks
+    }) 
   } catch (error) {
     console.log("err");
     console.error(error);
   }
-});
+}) ;
 
 app.command("/update", async ({ command, ack, say }) => {
   try {
@@ -256,22 +239,20 @@ app.command("/update", async ({ command, ack, say }) => {
 
 app.command("/delete", async ({ command, ack, say }) => {
   try {
-    await ack()
-   const jsonRecords= fs.readFile("db.json", function (err, data) {
-      const records = JSON.parse(jsonRecords)
-      const filteredRecords = records.filter(record => record.id !== id)
-      fs.writeFile("db.json",  JSON.stringify(filteredRecords, null, 2)), function (err) {
-        if (err) throw err;
-        say("Successfully deleted your file.");
-      }; 
-    }); 
-    console.log(jsonRecords)
-    say(`You've deleted a FAQ *${text}.*`);
-  } catch (error) {
-    say(`There was a problem. Try again.`);
+    await ack();
+    let removeQuestion = command.text;
+    let data = faqs.data
+    faqs.data = data.filter((question) => { return question.keyword !== removeQuestion });
+    fs.writeFileSync('db.json', JSON.stringify(faqs, null, 2));
+    say(`You've deleted a new FAQ with the keyword *${command.text}.*`);
+  } catch(error) {
+    say(`Something went wrong`);
     console.log("err");
     console.error(error);
   }
+  //questions = users
+  //raw = data
+  //faqs = json
 });
 
 (async () => {

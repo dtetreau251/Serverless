@@ -1,1 +1,34 @@
-{"data":[{"keyword":"name","question":"What is your name?","answer":"My name is Wise Guy. I'm here to help."},{"keyword":"creator","question":"Who is your creator?","answer":"David Tetreau"},{"keyword":"Bit Project","question":"What is Bit Project","answer":"Bit Project provides cutting-edge, open source learning experiences to prepare students for careers in tech."},{"keyword":"emily","question":"who else is in this channel","answer":"emily"},{"keyword":"hello","question":"hello?","answer":"Hey there. What can I help you with?"},{"keyword":"hi","question":"Hi","answer":"Hey there. What can I help you with?"},{"keyword":"hey","question":"hey","answer":"Hey there. What can I help you with?"},{"keyword":"President","question":"Who is the President of Bit Project?","answer":"Daniel"},{"keyword":"smartest","question":"who is the smartest","answer":"Wise Guy is the smartest!"}]}
+{
+  "data": [
+    {
+      "keyword": "creator",
+      "question": "Who is your creator?",
+      "answer": "David Tetreau"
+    },
+    {
+      "keyword": "hello",
+      "question": "hello?",
+      "answer": "Hey there. What can I help you with?"
+    },
+    {
+      "keyword": "hi",
+      "question": "Hi",
+      "answer": "Hey there. What can I help you with?"
+    },
+    {
+      "keyword": "hey",
+      "question": "hey",
+      "answer": "Hey there. What can I help you with?"
+    },
+    {
+      "keyword": "president",
+      "question": "Who is the President of Bit Project?",
+      "answer": "Daniel"
+    },
+    {
+      "keyword": "smartest",
+      "question": "who is the smartest",
+      "answer": "Wise Guy is the smartest!"
+    }
+  ]
+}
