@@ -13,7 +13,7 @@ let raw = fs.readFileSync("db.json");
 let faqs = JSON.parse(raw);
 let data = faqs.data;
 let keywords = ''
-let timestamp = ''
+let timestamp
 
 for(let i = 0; i < data.length; i++) {
   keywords += data[i].keyword + " ";
@@ -50,7 +50,6 @@ app.message(async ({ message, say }) => {
         text += "Also, " + data[i].answer;
     } 
   }
-  if(message.text == "hi" || message.text == "hey" || message.text == "hello") {
     await say({
       "blocks": [
         {
@@ -60,90 +59,34 @@ app.message(async ({ message, say }) => {
             "text": `${text}`
           }
         }
-      ],
-      thread_ts: message.ts,
-    });
-  } else {
-      await say({
-        "blocks": [
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": `${text}`
-            }
-          },
-          {
-            "type": "divider"
-          },
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": `Did this answer your question?`
-            }
-         },
-        {
-          "type": "actions",
-          "elements": [
-            {
-              "type": "button",
-              "text": {
-                "type": "plain_text",
-                "text": "Yes 😎",
-                "emoji": true
-              },
-              "value": "Yes",
-              "action_id": "button_click_yes"
-            },
-            {
-              "type": "button",
-              "text": {
-                "type": "plain_text",
-                "text": "No 🙁",
-                "emoji": true
-              },
-              "value": "No",
-              "action_id": "button_click_no"
-            }
-          ]
-        },
-      ],//blocks
-      thread_ts: message.ts,
-    });//say
+    ],//blocks
+    // thread_ts: message.ts,
+  });//say
+
+  text = '';
+  keywords = '';
+  timestamp = message.ts;
+
+  for(let i = 0; i < data.length; i++) {
+    keywords += data[i].keyword + " ";
+    if(message.text.includes(data[i].keyword) && text == '') {
+        text += data[i].answer
+    } else if(message.text.includes(data[i].keyword) && text != '') {
+        text += "Also, " + data[i].answer;
+    } 
   }
-// say() sends a message to the channel where the event was triggered   
-});
 
-app.action('button_click_yes', async ({ body, ack, say }) => {
-  // Acknowledge the action
-  await ack();
-  await say({
-    text: `Ok great!🎉🎉`,   
-    thread_ts: timestamp
+  await app.client.chat.postMessage({
+    // The token you used to initialize your app
+    token: process.env.SLACK_BOT_TOKEN,
+    channel: id,
+    thread_ts: message.ts,
+    text: `${text}`
+    // You could also use a blocks[] array to send richer content
   });
+
 });
 
-app.action('button_click_no', async ({ body, ack, say }) => {
-  // Acknowledge the action
-  await ack();
-  await say({
-    "blocks": [
-      {
-        "type": "divider"
-      },
-      {
-        "type": "section",
-        "text": {
-          "type": "plain_text",
-          "text": "I'm calling the calvary 🐴. Don't forget to update me with /update so I will know the answer too!",
-          "emoji": true
-        }
-      }
-    ],
-    thread_ts: timestamp
-  })
-});
 
 app.command("/knowledge", async ({ command, ack, say }) => {
   try {
@@ -198,7 +141,7 @@ app.command("/knowledge", async ({ command, ack, say }) => {
         }
       );
     });
-    
+
     say({
       "blocks": message.blocks
     }) 
@@ -250,9 +193,6 @@ app.command("/delete", async ({ command, ack, say }) => {
     console.log("err");
     console.error(error);
   }
-  //questions = users
-  //raw = data
-  //faqs = json
 });
 
 (async () => {
