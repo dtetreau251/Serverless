@@ -1,25 +1,49 @@
 {
-    "data":[
-        {
-            "keyword": "products",
-            "question": "How many different products do we sell at ZTC?",
-            "answer": "ZTC currently has 3 products on the market. Hibiscus tea with a hint of one of Lemon/Pineapple or ginger."
-        },
-        {
-            "keyword": "products",
-            "question": "What online stores sell our products?",
-            "answer": "Amazon, Macy's and Shoprite."
-        },
-        {
-            "keyword": "people",
-            "question": "How many people work at ZTC?",
-            "answer": "ZTC currently employs 250 people from 21 different countries."
-        },
-        {
-            "keyword": "reset password",
-            "question": "How do I reset my password?",
-            "answer": "To reset your company E-mail password, call Ola on ext.8099."
-        }
-
-    ]
+  "data": [
+    {
+      "keyword": "hello",
+      "question": "hello?",
+      "answer": "Hey there. What can I help you with?"
+    },
+    {
+      "keyword": "hi",
+      "question": "Hi",
+      "answer": "Hey there. What can I help you with?"
+    },
+    {
+      "keyword": "hey",
+      "question": "hey",
+      "answer": "Hey there. What can I help you with?"
+    },
+    {
+      "keyword": "smartest",
+      "question": "who is the smartest",
+      "answer": "Wise Guy is the smartest!"
+    },
+    {
+      "keyword": "bootcamp",
+      "question": "what is the best bootcamp?",
+      "answer": "bit project"
+    },
+    {
+      "keyword": "president",
+      "question": "who is the president of bit project?",
+      "answer": "daniel"
+    },
+    {
+      "keyword": "shreya",
+      "question": "who is awesome",
+      "answer": "shreya"
+    },
+    {
+      "keyword": "creator",
+      "question": "who is your creator?",
+      "answer": "david tetreau"
+    },
+    {
+      "keyword": "bit project",
+      "question": "what was created for?",
+      "answer": "bit project"
+    }
+  ]
 }
