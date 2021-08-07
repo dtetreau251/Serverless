@@ -13,7 +13,6 @@ let raw = fs.readFileSync("db.json");
 let faqs = JSON.parse(raw);
 let data = faqs.data;
 let keywords = ''
-let timestamp
 
 for(let i = 0; i < data.length; i++) {
   keywords += data[i].keyword + " ";
@@ -40,7 +39,6 @@ app.message(async ({ message, say }) => {
   // say() sends a message to the channel where the event was triggered
   let text = '';
   keywords = '';
-  timestamp = message.ts;
 
   for(let i = 0; i < data.length; i++) {
     keywords += data[i].keyword + " ";
@@ -60,33 +58,9 @@ app.message(async ({ message, say }) => {
           }
         }
     ],//blocks
-    // thread_ts: message.ts,
+    "thread_ts": message.thread_ts || message.ts
   });//say
-
-  text = '';
-  keywords = '';
-  timestamp = message.ts;
-
-  for(let i = 0; i < data.length; i++) {
-    keywords += data[i].keyword + " ";
-    if(message.text.includes(data[i].keyword) && text == '') {
-        text += data[i].answer
-    } else if(message.text.includes(data[i].keyword) && text != '') {
-        text += "Also, " + data[i].answer;
-    } 
-  }
-
-  await app.client.chat.postMessage({
-    // The token you used to initialize your app
-    token: process.env.SLACK_BOT_TOKEN,
-    channel: id,
-    thread_ts: message.ts,
-    text: `${text}`
-    // You could also use a blocks[] array to send richer content
-  });
-
-});
-
+})
 
 app.command("/knowledge", async ({ command, ack, say }) => {
   try {
@@ -142,14 +116,15 @@ app.command("/knowledge", async ({ command, ack, say }) => {
       );
     });
 
-    say({
-      "blocks": message.blocks
-    }) 
-  } catch (error) {
+    say(
+      {
+        "blocks": message.blocks,
+      }//blocks) 
+    )} catch (error) {
     console.log("err");
     console.error(error);
   }
-}) ;
+})
 
 app.command("/update", async ({ command, ack, say }) => {
   try {
