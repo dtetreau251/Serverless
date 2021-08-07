@@ -62,69 +62,64 @@ app.message(async ({ message, say }) => {
   });//say
 })
 
-app.command("/knowledge", async ({ command, ack, say }) => {
-  try {
-    await ack();
-    let message = { blocks: [] };
-    faqs.data.map((faq) => {
-      message.blocks.push(
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: "*Keyword 🗝*",
-          },
-        },
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: faq.keyword,
-          },
-        },
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: "*Question ❓*",
-          },
-        },
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: faq.question,
-          },
-        },
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: "*Answer ✔️*",
-          },
-        },
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: faq.answer,
-          },
-        },
-        {
-          "type": "divider"
-        }
-      );
-    });
+// app.command("/knowledge", async ({ command, ack, say }) => {
+//   try {
+//     await ack();
+//     let message = { blocks: [] };
+//     faqs.data.map((faq) => {
+//       message.blocks.push(
+//         {
+//           type: "section",
+//           text: {
+//             type: "mrkdwn",
+//             text: "*Keyword 🗝*",
+//           },
+//         },
+//         {
+//           type: "section",
+//           text: {
+//             type: "mrkdwn",
+//             text: faq.keyword,
+//           },
+//         },
+//         {
+//           type: "section",
+//           text: {
+//             type: "mrkdwn",
+//             text: "*Question ❓*",
+//           },
+//         },
+//         {
+//           type: "section",
+//           text: {
+//             type: "mrkdwn",
+//             text: faq.question,
+//           },
+//         },
+//         {
+//           type: "section",
+//           text: {
+//             type: "mrkdwn",
+//             text: "*Answer ✔️*",
+//           },
+//         },
+//         {
+//           type: "section",
+//           text: {
+//             type: "mrkdwn",
+//             text: faq.answer,
+//           },
+//         },
+//       );
+//     });
 
-    say(
-      {
-        "blocks": message.blocks,
-      }//blocks) 
-    )} catch (error) {
-    console.log("err");
-    console.error(error);
-  }
-})
+//     say(`${message.blocks}`)
+// })
+//   } catch (error) {
+//     console.log("err");
+//     console.error(error);
+//   }
+// })
 
 app.command("/update", async ({ command, ack, say }) => {
   try {

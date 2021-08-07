@@ -1,1 +1,49 @@
-{"data":[{"keyword":"hello","question":"hello?","answer":"Hey there. What can I help you with?"},{"keyword":"hi","question":"Hi","answer":"Hey there. What can I help you with?"},{"keyword":"hey","question":"hey","answer":"Hey there. What can I help you with?"},{"keyword":"smartest","question":"who is the smartest","answer":"Wise Guy is the smartest!"},{"keyword":"bootcamp","question":"what is the best bootcamp?","answer":"bit project"},{"keyword":"president","question":"who is the president of bit project?","answer":"daniel"},{"keyword":"shreya","question":"who is awesome","answer":"shreya"},{"keyword":"creator","question":"who is your creator?","answer":"david tetreau"}]}
+{
+  "data": [
+    {
+      "keyword": "hello",
+      "question": "hello?",
+      "answer": "Hey there. What can I help you with?"
+    },
+    {
+      "keyword": "hi",
+      "question": "Hi",
+      "answer": "Hey there. What can I help you with?"
+    },
+    {
+      "keyword": "hey",
+      "question": "hey",
+      "answer": "Hey there. What can I help you with?"
+    },
+    {
+      "keyword": "smartest",
+      "question": "who is the smartest",
+      "answer": "Wise Guy is the smartest!"
+    },
+    {
+      "keyword": "bootcamp",
+      "question": "what is the best bootcamp?",
+      "answer": "bit project"
+    },
+    {
+      "keyword": "president",
+      "question": "who is the president of bit project?",
+      "answer": "daniel"
+    },
+    {
+      "keyword": "shreya",
+      "question": "who is awesome",
+      "answer": "shreya"
+    },
+    {
+      "keyword": "creator",
+      "question": "who is your creator?",
+      "answer": "david tetreau"
+    },
+    {
+      "keyword": "bit project",
+      "question": "what was created for?",
+      "answer": "bit project"
+    }
+  ]
+}
