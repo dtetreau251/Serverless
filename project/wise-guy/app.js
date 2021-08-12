@@ -1,5 +1,7 @@
 const { App } = require("@slack/bolt");
 require("dotenv").config();
+const fs = require('fs')
+
 // Initializes your app with your bot token and signing secret
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
@@ -8,7 +10,6 @@ const app = new App({
    appToken: process.env.APP_TOKEN
 });
 
-const fs = require("fs");
 let raw = fs.readFileSync("db.json");
 let faqs = JSON.parse(raw);
 let data = faqs.data;
@@ -23,12 +24,13 @@ const welcomeChannelId = process.env.WELCOME_CHANNEL_ID;
 // When a user joins the team, send a message in a predefined channel asking them to introduce themselves
 app.event('channel_join', async ({ event, client }) => {
   try {
+    
     // Call chat.postMessage with the built-in client
     const result = await client.chat.postMessage({
       channel: welcomeChannelId,
       text: `Welcome to the Wise-Guy channel, <@${event.user.id}>! 🎉 Ask me questions about the course. If I don't know the answer, an instructor or fellow students can answer. You can add a keyword, questions, and answers using /update.`
     });
-    console.log(result);
+    say(result);
   }
   catch (error) {
     console.error(error);
@@ -45,7 +47,7 @@ app.message(async ({ message, say }) => {
     if(message.text.includes(data[i].keyword) && text == '') {
         text += data[i].answer
     } else if(message.text.includes(data[i].keyword) && text != '') {
-        text += "Also, " + data[i].answer;
+        text += " Also, " + data[i].answer;
     } 
   }
     await say({
@@ -62,64 +64,54 @@ app.message(async ({ message, say }) => {
   });//say
 })
 
-// app.command("/knowledge", async ({ command, ack, say }) => {
-//   try {
-//     await ack();
-//     let message = { blocks: [] };
-//     faqs.data.map((faq) => {
-//       message.blocks.push(
-//         {
-//           type: "section",
-//           text: {
-//             type: "mrkdwn",
-//             text: "*Keyword 🗝*",
-//           },
-//         },
-//         {
-//           type: "section",
-//           text: {
-//             type: "mrkdwn",
-//             text: faq.keyword,
-//           },
-//         },
-//         {
-//           type: "section",
-//           text: {
-//             type: "mrkdwn",
-//             text: "*Question ❓*",
-//           },
-//         },
-//         {
-//           type: "section",
-//           text: {
-//             type: "mrkdwn",
-//             text: faq.question,
-//           },
-//         },
-//         {
-//           type: "section",
-//           text: {
-//             type: "mrkdwn",
-//             text: "*Answer ✔️*",
-//           },
-//         },
-//         {
-//           type: "section",
-//           text: {
-//             type: "mrkdwn",
-//             text: faq.answer,
-//           },
-//         },
-//       );
-//     });
-
-//     say(`${message.blocks}`)
-// })
-//   } catch (error) {
-//     console.log("err");
-//     console.error(error);
-//   }
-// })
+app.command("/knowledge", async ({ command, ack, client }) => {
+  try {
+    await ack();
+    let message = { blocks: [] };
+    faqs.data.map((faq) => {
+      message.blocks.push(
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: "*Question ❓*",
+          },
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: faq.question,
+          },
+        },
+        {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: "*Answer ✔*",
+            },
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: faq.answer,
+            },
+          },
+      );
+    });
+    await client.chat.postEphemeral({
+      channel: welcomeChannelId,
+      user: command.user_id,
+      text: "Here's my knowledge base!",
+       blocks: message.blocks,
+    });
+    //say(message);
+  } catch (error) {
+    console.log("err");
+    console.error(error);
+  }
+});
 
 app.command("/update", async ({ command, ack, say }) => {
   try {
