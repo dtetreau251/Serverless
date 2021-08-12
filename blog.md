@@ -7,12 +7,12 @@ If you use Slack for work or school, you know that team members and/or instructo
 Wise-Guy, a Serverless Slack Bot, aims to help alleviate that stress, and will help boost productivity. It works by using slash commands in Slack to update the knowledge base. The bot then monitors whatever channel it is added to for keywords. If it recognizes one of the keywords, it will reply with a threaded conversation.
 ## About Me
 
-<img src=""/david-t.jpg>
+<img src="/david-t.jpg">
 
 My name is David Tetreau. I am a career changer aiming to transitioning into a career in web development. I have taken several non-traditional training programs on my path to being a Web Developer. I enjoy sharing knowledge with others who have the same goal!
 ## Behind the scenes (include and describe flowchart)
 
-<img src ="./project/Serverless Camp Project.png>
+<img src ="./project/Serverless Camp Project.png">
 
 The chart above was the initial project plan. It included a much more complex architecture. The architecture was simplified and includes a Node.js app deployed to a serverless platform, the Slack Bolt Framework, and a JSON file which acts as a simple database. The conversation channel that interacts with the bot was simplified to only interact with Slack.
 ## The Technologies
