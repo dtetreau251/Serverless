@@ -11,7 +11,7 @@ Wise-Guy, a Serverless Slack Bot, aims to help alleviate that stress, and will h
     <img src="/david-t.jpg">
 </p>
 
-My name is David Tetreau. I am a career changer aiming to transitioning into a career in web development. I have many years of experience in the government and military sectors in non-technical roles. Although I do have a great deal of formal education, I have also taken several non-traditional training programs on my path to being a Web Developer. One of these programs was Bit Project. I learned a great deal about serverless technologies I enjoy sharing knowledge with others who have the same goal! 
+My name is David Tetreau. I am a career changer aiming to transitioning into a career in web development. I have many years of experience in the government and military sectors in non-technical roles. Although I do have a great deal of formal education, I have also taken several non-traditional training programs on my path to being a Web Developer. One of these programs was Bit Project. I learned a great deal about serverless technologies, and I discovered that I enjoy sharing knowledge with others who have the same goal! Here is a project I built during the program. 
 ## Behind the scenes (include and describe flowchart)
 
 <img src ="./project/Serverless Camp Project.png">
