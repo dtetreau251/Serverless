@@ -11,7 +11,7 @@ Wise-Guy, a Serverless Slack Bot, aims to help alleviate that stress, and will h
     <img src="/david-t.jpg">
 </p>
 
-My name is David Tetreau. I am a career changer aiming to transitioning into a career in web development. I have taken several non-traditional training programs on my path to being a Web Developer. I enjoy sharing knowledge with others who have the same goal!
+My name is David Tetreau. I am a career changer aiming to transitioning into a career in web development. I have many years of experience in the government and military sectors in non-technical roles. Although I do have a great deal of formal education, I have also taken several non-traditional training programs on my path to being a Web Developer. One of these programs was Bit Project. I learned a great deal about serverless technologies I enjoy sharing knowledge with others who have the same goal! 
 ## Behind the scenes (include and describe flowchart)
 
 <img src ="./project/Serverless Camp Project.png">
@@ -19,6 +19,20 @@ My name is David Tetreau. I am a career changer aiming to transitioning into a c
 The chart above was the initial project plan. It included a much more complex architecture. The architecture was simplified and includes a Node.js app deployed to a serverless platform, the Slack Bolt Framework, and a JSON file which acts as a simple database. The conversation channel that interacts with the bot was simplified to only interact with Slack.
 ## The Technologies
 The project is made with the Slack Bolt framework. This is a resource which eases the difficulty of making the bot. The documentation is located [here](https://slack.dev/bolt-js/tutorial/getting-started). The bot can be tailored to a user's needs with JavaScript/Node.js Also, the bot will be connected to communication channels via their respective adapters, config files, and packages. The project can be deployed to a platform like Azure in the same way you would deploy a regular Node.js application.
+### Slack Bolt Framework
+According to Slack, it's the "swiftest way to start programming with the Slack Platform in JavaScript.
+This library is very well documented. It makes starting a bot very easy. Customizing a bot and tailoring it to your specific needs takes some planning and a little trial and error. Once, you are familiar with this framework, this is a very powerful tool to enhance productivity. For this project, this technology was used by installing the @slack/bolt package along with the nodemon package, and the dotenv package.
+### Web Sockets
+Web Sockets can be used to develop a Slack App and this offers a much faster development experience. While developing this project and prior to deployment, all requests to my development server were made via WebSockets. 
+
+### Simple mini database using a JSON file
+By using a JSON file with keywords, questions, and answers, this project can run without a complicated database. If the data requirements become very complex, other technologies like MongoDB could be added. 
+
+### Slack
+The Slack platform was used to create the Slack App along with the slash commands that are used to update, delete, and list the knowledge base. The app is added to a workspace and then to specific channels where it monitors messages and responds if there is a keyword from it's database recognized in the conversation. 
+
+### Azure Web App 
+After this project is finalized, it can be deployed to an Azure Web App by using WebHook Integration. In the meanwhile, it is run locally using Node. 
 # Moving forward
 There are a number of additional features which can be added to this bot. The bot can DM channel members if the bot doesn't know the answer to their question, there is a block builder kit to include features such as buttons and modals. Who knew you could customize and automate Slack to do exactly what you want it to do? What's more, who knew that you can incorporate serverless technologies such as Azure to host such a solution? I can't wait to see what you build with it!
 ## Thanks and Acknowledgements
