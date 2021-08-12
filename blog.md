@@ -1,101 +1,330 @@
-# Serverless Bot
+# How David Built a Serverless Slack Bot
 
+By using the Slack Bolt framework, Node.js, JavaScript, and serverless web app hosting, David built a solution to save time and help with productivity.
 ## About Me
-My name is David Tetreau. I am a career changer aiming to transition into a career in Web Development. I have taken several non- traditional training programs on my path to being a Web Developer. I enjoy sharing knowledge with others who have the same goal!
+
+<img src=""/david-t.jpg>
+
+My name is David Tetreau. I am a career changer aiming to transition into a career in Web Development. I have taken several non-traditional training programs on my path to being a Web Developer. I enjoy sharing knowledge with others who have the same goal!
 ## The Premise
-The project I am building is an Azure QnA Maker bot. The bot will be connected to communication channels (i.e. Slack, Twilio (SMS), etc.). The user will be able to ask the bot questions about the Bit Project Intro To Serverless Program. The knowledge base used for the bot is made from questions that have been asked by other students. The knowledge base is also made from frequently asked questions on Azure pages. 
+
+The project I am building is a Slack bot for frequently asked questions. The bot can be connected to a workspace and brought into a specific channel. The user will be able to ask the bot questions and receive a response if the question is in its knowledge base. The knowledge base used for the bot is made from keywords, questions, and answers input by channel users. The updates are made by inputting slash commands. The knowledge base also contains chit chat.
 ## Tools used
-The project use QnAMaker. This is a resource which eases the difficulty of making the bot. The bot also uses LUIS (Language Understanding) - Cognitive Services - Microsoft Language Understanding (LUIS) is a machine learning-based service to build natural language into apps. Also, the bot will be connected to communication channels via their respective adapters, config files, and packages. 
+The project is made with the Slack Bolt framework. This is a resource which eases the difficulty of making the bot. The documentation is located [here](https://slack.dev/bolt-js/tutorial/getting-started). The bot can be tailored to a user's needs with Node.js Also, the bot will be connected to communication channels via their respective adapters, config files, and packages.
 ## Step by step (with code snippets)
-**These instructions were adapted from these documents**
-[Connect a bot to Twilio](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-channel-connect-twilio?view=azure-bot-service-4.0)
-[Quickstart: Create, train, and publish your QnA Maker knowledge base](https://docs.microsoft.com/en-us/azure/cognitive-services/QnAMaker/Quickstarts/create-publish-knowledge-base?tabs=v1)
-[Medium](https://medium.com/coinmonks/how-to-make-a-q-a-chatbot-with-machine-learning-1c90207bde7b)
+Here are the steps to making the app:
+1. Create a workspace in Slack
+2. Create a new Slack application in the Slack API dashboard
+3. Click the Create New App button
+4. Name the bot and then select what workspace the bot will be installed in
+5. Push Create App and the dashboard for the app will appear
+6. Go to OAuth and Permissions menu option on the left
+7. Go to Scopes and give your bot the desired permissions 
+8. Install the app to your workspace
+9. Go to Settings > Install Apps > Install to Workspace.
+10. On your local machine, create a directory and initialize npm:
+11. mkdir your-dir-name && cd your-dir-name 
+12.  npm init -y
+13. Install the following packages in the directory:
+- yarn add @slack/bolt
+- yarn add -D nodemon dotenv
+14. Edit your package.json to reflect the following:
 
-1. Sign into the QnAMaker.ai portal with Azure credentials (student credentials if you are a student).
-2. In the QnA Maker portal, create a knowledge base.
-<img src="./project/Knowledge base.PNG/>
+...
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon app.js"
+  },
+....
 
-3. On the create page, either make a QnA Maker resource if you don't have one proceed to connecting your knowledge base to your AnA service. This involves configuration settings and naming your KB.
-<img src="./project/connect.PNG>
+15. Create a new file in your directory using touch app.js
+16. Find your SLACK_SIGNING_SECRET by finding Basic Information > App Credentials > Signing Secret. 
+17. Find your SLACK_BOT_TOKEN by finding Settings > Install App > Bot User oAuth Token. 
+18. Create a .env file in the root directory of your project and include the following:
 
-4. Create your knowledge base by either adding questions and answer pairs manually, providing URLs to FAQ pages from the internet, or both. 
-5. Publish the knowledge base
-6. Create a bot with the "Create Bot" button
-<img src="./project/create.png>
+```JavaScript
+SLACK_SIGNING_SECRET="YOUR SIGNING SECRET"
+SLACK_BOT_TOKEN="YOUR BOT TOKEN"
+```
 
-7. Test the bot under "Test in Web Chat"
-8. Log into your communication channel. We will use Twilio. 
-9. Create a TwiML Application
-10. Select or add a phone number
-11. Specify application to use for Voice and Messaging
-12. Gather credentials
-13. Submit credentials
-14.Connect the bot to Twilio using the Twilio adapter
-15. Code a Twilio adapter class
+19. Open app.js file and add the code below:
+
+```JavaScript
+const { App } = require("@slack/bolt");
+require("dotenv").config();
+// Initializes your app with your bot token and signing secret
+const app = new App({
+  token: process.env.SLACK_BOT_TOKEN,
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+});
+
+(async () => {
+  const port = 3000
+  // Start your app
+  await app.start(process.env.PORT || port);
+  console.log(`⚡️ Slack Bolt app is running on port ${port}!`);
+})();
+```
+
+20. Enter yarn run dev in your terminal. This runs the program.
+21. Generate a token by going to Settings > Basic Information > App-Level Tokens. Once there, click the Generate Token and Scopes button. Give your token a name, and give your app the scopes: connections:write and authorizations:read. 
+22. Push the generate button and copy the token on the next screen into your .env file (create another variable and assign the token as its value).
+23. Enable socket mode by going to Settings > Socket Mode and toggle socket mode. 
+24. In app.js, make your code reflect the following:
+
+```JavaScript
+const app = new App({
+  token: process.env.SLACK_BOT_TOKEN,
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  socketMode:true, // enable the following to use socket mode
+  appToken: process.env.APP_TOKEN
+});
 
 ```
-public class TwilioAdapterWithErrorHandler : TwilioAdapter
-{
-    public TwilioAdapterWithErrorHandler(IConfiguration configuration, ILogger<BotFrameworkHttpAdapter> logger)
-            : base(configuration, logger)
+25.  Create some slash commands by clicking the Slash Commands menu option on the left. Then click the Create New Command button, fill out the information for the /knowledge command (which prints the entire knowledge base), and click save. 
+26. In your app.js file, add the following code:
+
+```JavaScript
+const { App } = require("@slack/bolt");
+require("dotenv").config();
+// Initializes your app with your bot token and signing secret
+const app = new App({
+  token: process.env.SLACK_BOT_TOKEN,
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+});
+
+app.command("/knowledge", async ({ command, ack, client }) => {
+  try {
+    await ack();
+    let message = { blocks: [] };
+    faqs.data.map((faq) => {
+      message.blocks.push(
         {
-            OnTurnError = async (turnContext, exception) =>
-            {
-                // Log any leaked exception from the application.
-                logger.LogError(exception, $"[OnTurnError] unhandled error : {exception.Message}");
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: "*Question ❓*",
+          },
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: faq.question,
+          },
+        },
+        {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: "*Answer ✔*",
+            },
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: faq.answer,
+            },
+          },
+      );
+    });
+    await client.chat.postEphemeral({ //this ensures that only the user sees the entire knowledge base
+      channel: welcomeChannelId,
+      user: command.user_id,
+      text: "Here's my knowledge base!",
+       blocks: message.blocks,
+    });
+  } catch (error) {
+    console.log("err");
+    console.error(error);
+  }
+});
 
-                // Send a message to the user
-                await turnContext.SendActivityAsync("The bot encountered an error or bug.");
-                await turnContext.SendActivityAsync("To continue to run this bot, please fix the bot source code.");
 
-                // Send a trace activity, which will be displayed in the Bot Framework Emulator
-                await turnContext.TraceActivityAsync("OnTurnError Trace", exception.Message, "https://www.botframework.com/schemas/error", "TurnError");
-            };
+```
+27. Click the subscribe to bot events dropdown and add the following events: 
+message.channels, message.groups, message.im, message.mpim
+28. Put this code in app.js. This will monitor every message and check if it contains
+one of the keywords in its knowledge base. 
+
+```
+app.message(async ({ message, say }) => {
+  // say() sends a message to the channel where the event was triggered
+  let text = '';
+  keywords = '';
+
+  for(let i = 0; i < data.length; i++) {
+    keywords += data[i].keyword + " ";
+    if(message.text.includes(data[i].keyword) && text == '') {
+        text += data[i].answer
+    } else if(message.text.includes(data[i].keyword) && text != '') {
+        text += " Also, " + data[i].answer;
+    } 
+  }
+    await say({
+      "blocks": [
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": `${text}`
+          }
         }
-}
+    ],//blocks
+    "thread_ts": message.thread_ts || message.ts
+  });//say
+})
 
 ```
 
-16. Create a new controller for handling Twilio requests
+// require the fs module that's built into Node.js
+const fs = require('fs')
+// get the raw data from the db.json file
+let raw = fs.readFileSync('db.json');
+// parse the raw bytes from the file as JSON
+let faqs= JSON.parse(raw);
+
+29. Now put the following code in app.js. This will print the entire knowledge base in Slack:
+
+```JavaScript
+app.command("/knowledge", async ({ command, ack, say }) => {
+  try {
+    await ack();
+    let message = { blocks: [] };
+    faqs.data.map((faq) => {
+      message.blocks.push(
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: "*Question*",
+          },
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: faq.question,
+          },
+        },
+        {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: "*Answer*",
+            },
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: faq.answer,
+            },
+          }
+      );
+    });
+    say(message);
+  } catch (error) {
+    console.log("err");
+    console.error(error);
+  }
+});
 
 ```
-[Route("api/twilio")]
-[ApiController]
-public class TwilioController : ControllerBase
-{
-    private readonly TwilioAdapter _adapter;
-    private readonly IBot _bot;
+We’re using blocks (provided by the Slack Bolt API) and markdown to format the messages we’ll be displaying to users. To further customize messages from your bot when they’re sent to the user, Slack provides a Block Kit Builder that you can use to get your desired template.
 
-    public TwilioController(TwilioAdapter adapter, IBot bot)
-    {
-        _adapter = adapter;
-        _bot = bot;
-    }
+You can test this out by typing the command /knowledge in the private conversation with the ask-ztc-bot.
 
-    [HttpPost]
-    [HttpGet]
-    public async Task PostAsync()
-    {
-        // Delegate the processing of the HTTP POST to the adapter.
-        // The adapter will invoke the bot.
-        await _adapter.ProcessAsync(Request, Response, _bot, default);
-    }
-}
+Test Command Bot Conversation
+As you can see, it correctly lists all the FAQs in our knowledge base.
+
+Next, we’ll use a simple regular expression to detect if a user has included the keyword products in their question. If they have, we’ll show them FAQs with the keyword products:
+
+app.message(/products/, async ({ command, say }) => {
+  try {
+    let message = { blocks: [] };
+    const productsFAQs = faqs.data.filter((faq) => faq.keyword === "products");
+
+    productsFAQs.map((faq) => {
+      message.blocks.push(
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: "*Question ❓*",
+          },
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: faq.question,
+          },
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: "*Answer ✔️*",
+          },
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: faq.answer,
+          },
+        }
+      );
+    });
+
+    say(message);
+  } catch (error) {
+    console.log("err");
+    console.error(error);
+  }
+});
+To test this out, send a message to the bot that includes the word products, and the bot will respond with all the information that has to do with the products keyword.
+
+Test Bot Keywords Response
+Updating the knowledge base
+Finally, we want to give users the ability to add their own data to the knowledge base.
+
+- Create a new Slash Command called /update. This command will be called by users to add new data to our knowledge base.
+
+- We’ve made a slight change to this command. In the usage hint, we’ve specified that users should separate the different fields using the pipe | character. This way, we can take the input string sent by a user and split it using the pipe character.
+
+```JavaScript
+app.command("/update", async ({ command, ack, say }) => {
+  try {
+    await ack();
+    const data = command.text.split("|");
+    const newFAQ = {
+      keyword: data[0].trim(),
+      question: data[1].trim(),
+      answer: data[2].trim(),
+    };
+    // save data to db.json
+    fs.readFile("db.json", function (err, data) {
+      const json = JSON.parse(data);
+      json.data.push(newFAQ);
+      fs.writeFile("db.json", JSON.stringify(json), function (err) {
+        if (err) throw err;
+        console.log("Successfully saved to db.json!");
+      });
+    });
+    say(`You've added a new FAQ with the keyword *${newFAQ.keyword}.*`);
+  } catch (error) {
+    console.log("err");
+    console.error(error);
+  }
+});
+
 ```
 
-17. Inject the Twilio adapter in your bot startup.cs
-
-```
-services.AddSingleton<TwilioAdapter, TwilioAdapterWithErrorHandler>();
-```
-
-18. Obtain a URL from your bot
-19. Add Twilo app settings to your bot's configuration file
-20. Complete configuration of your Twilio number
-21. Test your bot with adapter in Twilio
-22. You're ready!
+- You can deploy your app to a platform like Heroku in the same way you would deploy a regular Node.js application. Don’t forget to change the URL in the event subscription section to the new one provided by Heroku.
 ## Challenges + lessons learned
-At the beginning my goals were fairly lofty. I listed many services on my project plan. As the project progressed, the project architecture became much more simple and scalable. Also, while working with the MS Bot Framework Composer, there were several errors which were difficult to resolve. The errors had to do with generated code, and I had to have enough knowledge of the generated code to work out the issues. 
+At the beginning my goals were fairly lofty. I listed many services on my project plan. As the project progressed, the project architecture became much more simple and scalable. Also, while working with the Bolt Framework, I found it difficult to make the conversations thread. Although there was excellent documentation, there were several errors which were difficult to resolve. The errors had to do with generated code, and I had to have enough knowledge of the generated code to work out the issues. 
 ## Thanks and Acknowledgements
 Thanks to Bit Project for sharing their talent, time, and expertise to teach motivated individuals from all walks of life the value of using serverless technologies. 
