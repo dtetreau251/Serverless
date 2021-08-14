@@ -65,52 +65,67 @@ app.message(async ({ message, say }) => {
 })
 
 app.command("/knowledge", async ({ command, ack, client }) => {
-  try {
     await ack();
     let message = { blocks: [] };
-    faqs.data.map((faq) => {
-      message.blocks.push(
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: "*Question ❓*",
-          },
-        },
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: faq.question,
-          },
-        },
-        {
+    try {
+        faqs.data.map((faq) => {
+        message.blocks.push(
+          {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: "*Answer ✔*",
+              text: "*Keyword 🗝*",
             },
           },
           {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: faq.answer,
+              text: faq.keyword,
             },
           },
-      );
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: "*Question ❓*",
+            },
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: faq.question,
+            },
+          },
+          {
+              type: "section",
+              text: {
+                type: "mrkdwn",
+                text: "*Answer ✔*",
+              },
+            },
+            {
+              type: "section",
+              text: {
+                type: "mrkdwn",
+                text: faq.answer,
+              },
+            },
+            {
+              "type": "divider"
+            }
+        );
+        client.chat.postEphemeral({
+          channel: welcomeChannelId,
+          user: command.user_id,
+          text: "Shhhh only you can see this :shushing_face:",
+          blocks: message.blocks
+      })
     });
-    await client.chat.postEphemeral({
-      channel: welcomeChannelId,
-      user: command.user_id,
-      text: "Here's my knowledge base!",
-       blocks: message.blocks,
-    });
-    //say(message);
-  } catch (error) {
-    console.log("err");
-    console.error(error);
-  }
+    } catch(error) {
+      console.log(error)
+    }
 });
 
 app.command("/update", async ({ command, ack, say }) => {
