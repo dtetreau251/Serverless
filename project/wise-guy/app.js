@@ -45,9 +45,9 @@ app.message(async ({ message, say }) => {
   for(let i = 0; i < data.length; i++) {
     keywords += data[i].keyword + " ";
     if(message.text.includes(data[i].keyword) && text == '') {
-        text += data[i].answer
+        text += "Here's what I found: \n" + data[i].question + "\n" + data[i].answer + '\n'
     } else if(message.text.includes(data[i].keyword) && text != '') {
-        text += " Also, " + data[i].answer;
+        text += "\n Also, I found: \n" + data[i].question + "\n" + data[i].answer;
     } 
   }
     await say({
@@ -140,7 +140,6 @@ app.command("/update", async ({ command, ack, say }) => {
       answer: data[2].trim(),
     };
 
-    // save data to db.json
     fs.readFile("db.json", function (err, data) {
       const json = JSON.parse(data);
       json.data.push(newFAQ);
