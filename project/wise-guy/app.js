@@ -47,20 +47,12 @@ app.message(async ({ message, say }) => {
     if(message.text.includes(data[i].keyword) && text == '') {
         text += `Question: ${data[i].question} \nAnswer: ${data[i].answer} \n`
     } else if(message.text.includes(data[i].keyword) && text != '') {
-        text += `Question: ${data[i].question} \nAnswer: ${data[i].answer} \n`;
+        text += `\nQuestion: ${data[i].question} \nAnswer: ${data[i].answer} \n`;
     } 
   }
-    await say({
-      "blocks": [
-        {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": `${text}`
-          }
-        }
-    ],//blocks
-    "thread_ts": message.thread_ts || message.ts
+    await say({//blocks
+    "thread_ts": message.thread_ts || message.ts,
+    "text": `${text}`,
   });//say
 })
 
