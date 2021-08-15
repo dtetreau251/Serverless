@@ -45,9 +45,9 @@ app.message(async ({ message, say }) => {
   for(let i = 0; i < data.length; i++) {
     keywords += data[i].keyword + " ";
     if(message.text.includes(data[i].keyword) && text == '') {
-        text += "Here's what I found: \n" + data[i].question + "\n" + data[i].answer + '\n'
+        text += `Question: ${data[i].question} \nAnswer: ${data[i].answer} \n`
     } else if(message.text.includes(data[i].keyword) && text != '') {
-        text += "\n Also, I found: \n" + data[i].question + "\n" + data[i].answer;
+        text += `Question: ${data[i].question} \nAnswer: ${data[i].answer} \n`;
     } 
   }
     await say({
